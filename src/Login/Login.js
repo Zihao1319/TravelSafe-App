@@ -1,4 +1,4 @@
-import auth from "./firebase";
+import auth from "../firebase";
 import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -13,7 +13,7 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { PropaneRounded, PropaneSharp } from "@mui/icons-material";
 
 const Login = (props) => {
@@ -28,7 +28,7 @@ const Login = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    signInWithEmailAndPassword(auth, form.email, form.password)
+    signInWithEmailAndPassword(getAuth(), form.email, form.password)
       .then((response) => {
         console.log("Login successful");
         props.setLogin();
@@ -108,10 +108,10 @@ const Login = (props) => {
                   autoComplete="current-password"
                   onChange={handleTextChange}
                 />
-                <FormControlLabel
+                {/* <FormControlLabel
                   control={<Checkbox value="remember" color="primary" />}
                   label="Remember me"
-                />
+                /> */}
                 <Button
                   type="submit"
                   fullWidth
@@ -127,7 +127,7 @@ const Login = (props) => {
                     </Link>
                   </Grid>
                   <Grid item>
-                    <Link href="#" variant="body2">
+                    <Link href="./SignUp" variant="body2">
                       {"Don't have an account? Sign Up"}
                     </Link>
                   </Grid>
