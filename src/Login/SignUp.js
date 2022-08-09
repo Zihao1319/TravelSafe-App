@@ -4,6 +4,7 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
 } from "firebase/auth";
+import { auth } from "../firebase";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -37,7 +38,7 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const auth = getAuth();
+    // const auth = getAuth();
     const database = getDatabase();
     console.log(form.email, form.password);
 
@@ -151,7 +152,7 @@ const SignUp = () => {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="./" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>

@@ -1,23 +1,30 @@
 import ReactDOM from "react-dom/client";
 import { Route, Link, Routes } from "react-router-dom";
+
 import React, { useState } from "react";
 import "./App.css";
 import Login from "./Login/Login";
 import SignUp from "./Login/SignUp";
+import TravelCheck from "./Main/TravelCheck";
 
 const App = () => {
   const [login, setLogin] = useState(false);
 
   const handleLogin = (e) => {
-    setLogin({ isLogin: true });
+    setLogin({ login: true });
     console.log("Logged in");
   };
+
+  console.log(login);
   return (
     <>
       <Routes>
         <Route exact path="/" element={<Login setLogin={handleLogin} />} />
         <Route exact path="/signup" element={<SignUp />} />
+        <Route exact path="/travelcheck" element={<TravelCheck />} />
+
         {/* <Login setLogin={handleLogin} /> */}
+        {/* {login && <travelCheck />} */}
       </Routes>
     </>
   );

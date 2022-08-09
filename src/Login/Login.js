@@ -1,4 +1,3 @@
-import auth from "../firebase";
 import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -14,6 +13,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
 import { PropaneRounded, PropaneSharp } from "@mui/icons-material";
 
 const Login = (props) => {
@@ -28,7 +28,8 @@ const Login = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    signInWithEmailAndPassword(getAuth(), form.email, form.password)
+    // const auth = getAuth();
+    signInWithEmailAndPassword(auth, form.email, form.password)
       .then((response) => {
         console.log("Login successful");
         props.setLogin();
