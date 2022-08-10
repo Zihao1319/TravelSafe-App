@@ -6,6 +6,7 @@ import "./App.css";
 import Login from "./Login/Login";
 import SignUp from "./Login/SignUp";
 import TravelCheck from "./Main/TravelCheck";
+import TravelForm from "./Main/Form";
 
 const App = () => {
   const [login, setLogin] = useState(false);
@@ -21,7 +22,7 @@ const App = () => {
       <Routes>
         <Route exact path="/" element={<Login setLogin={handleLogin} />} />
         <Route exact path="/signup" element={<SignUp />} />
-        <Route exact path="/travelcheck" element={<TravelCheck />} />
+        <Route exact path="/travelform" element={<TravelForm />} />
 
         {/* <Login setLogin={handleLogin} /> */}
         {/* {login && <travelCheck />} */}

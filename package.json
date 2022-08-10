@@ -13,13 +13,15 @@
     "amadeus": "^7.0.0",
     "axios": "^0.27.2",
     "firebase": "^9.9.1",
+    "formik": "^2.2.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "util": "^0.12.4",
     "web-vitals": "^2.1.4",
-    "webpack": "^5.74.0"
+    "webpack": "^5.74.0",
+    "yup": "^0.32.11"
   },
   "scripts": {
     "start": "react-app-rewired start",
