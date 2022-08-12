@@ -5,7 +5,6 @@ import React, { useState } from "react";
 import "./App.css";
 import Login from "./Login/Login";
 import SignUp from "./Login/SignUp";
-import TravelCheck from "./Main/TravelCheck";
 import TravelForm from "./Main/Form";
 
 const App = () => {
