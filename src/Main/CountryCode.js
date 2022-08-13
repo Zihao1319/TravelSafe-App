@@ -1,9 +1,3 @@
-// const countryCodes = [
-//   { value: "AF", label: "Afghanistan" },
-//   { value: "AX", label: "Åland Islands" },
-//   { value: "AL", label: "Albania" },
-// ];
-
 const countryCode = {
   AF: "Afghanistan",
   AX: "Åland Islands",
@@ -272,5 +266,5 @@ const properFormat = (obj) => {
 };
 
 const countryCodes = properFormat(countryCode);
-console.log(countryCodes);
+// console.log(countryCodes);
 export default countryCodes;

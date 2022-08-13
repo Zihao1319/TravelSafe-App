@@ -12,8 +12,10 @@
     "@testing-library/user-event": "^13.5.0",
     "amadeus": "^7.0.0",
     "axios": "^0.27.2",
+    "browserify-fs": "^1.0.0",
     "firebase": "^9.9.1",
     "formik": "^2.2.9",
+    "fs": "^0.0.1-security",
     "iso-3166-1-alpha-2": "^1.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -60,5 +62,10 @@
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "url": "^0.11.0"
+  },
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
   }
 }

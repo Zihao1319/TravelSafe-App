@@ -3,6 +3,9 @@ import { useFormik } from "formik";
 import axios from "axios";
 import countryCodes from "./CountryCode";
 import SelectCountry from "./SelectCountry";
+import DisplayInfo from "./DisplayInfo";
+import SingaporeData from "../testdata";
+
 const options = countryCodes;
 
 const reqToken = {
@@ -16,9 +19,15 @@ const reqToken = {
   }),
 };
 
+const randomSelect = (arr) => {
+  let num = Math.floor(Math.random() * arr.length);
+  return num;
+};
+
 const TravelForm = () => {
   const [destination, setDestination] = useState("");
   const [token, setToken] = useState(null);
+  const [randomCountry, setRandomCountry] = useState();
   const [info, setInfo] = useState();
 
   const validate = (values) => {
@@ -30,6 +39,9 @@ const TravelForm = () => {
 
     return errors;
   };
+
+  // console.log(options[randomSelection].label);
+
   const formik = useFormik({
     initialValues: { country: "" },
     validate,
@@ -41,6 +53,9 @@ const TravelForm = () => {
   });
 
   useEffect(() => {
+    const randomCountry = options[randomSelect(options)].label;
+    setRandomCountry(randomCountry);
+
     const fetchToken = async () => {
       await axios.request(reqToken).then((res) => {
         console.log(res.data.access_token);
@@ -55,34 +70,41 @@ const TravelForm = () => {
     const fetchData = async () => {
       const data = {
         method: "GET",
-        url: `https://test.api.amadeus.com/v1/reference-data/airlines?airlineCodes=${destination}`,
-        // url: `https://test.api.amadeus.com/v2/duty-of-care/diseases/covid19-area-report?countryCode=${destination}`,
+        // url: `https://test.api.amadeus.com/v1/reference-data/airlines?airlineCodes=${destination}`,
+        url: `https://test.api.amadeus.com/v2/duty-of-care/diseases/covid19-area-report?countryCode=${destination}`,
         headers: { Authorization: await `Bearer ${token}` },
       };
 
       axios.request(data).then((res) => {
-        console.log(token, res);
+        const data = JSON.stringify(res.data.data);
+        console.log(token, data);
       });
     };
 
     fetchData().catch(console.error);
   }, [destination]);
 
-  return (
-    <form onSubmit={formik.handleSubmit}>
-      <label htmlFor="country">Where would you love to go?</label>
+  console.log(SingaporeData);
 
-      <SelectCountry
-        options={options}
-        value={formik.values.country}
-        onChange={(value) => formik.setFieldValue("country", value.value)}
-        className={"input"}
-      />
-      {formik.errors.country ? (
-        <div className="error">{formik.errors.country}</div>
-      ) : null}
-      <button type="submit">Submit</button>
-    </form>
+  return (
+    <>
+      <form onSubmit={formik.handleSubmit}>
+        <label htmlFor="country">Where would you love to go?</label>
+
+        <SelectCountry
+          placeholder={randomCountry}
+          options={options}
+          value={formik.values.country}
+          onChange={(value) => formik.setFieldValue("country", value.value)}
+          className={"input"}
+        />
+        {formik.errors.country ? (
+          <div className="error">{formik.errors.country}</div>
+        ) : null}
+        <button type="submit">Submit</button>
+      </form>
+      <DisplayInfo data={SingaporeData} />
+    </>
   );
 };
 
