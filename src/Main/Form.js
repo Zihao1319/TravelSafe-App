@@ -84,7 +84,7 @@ const TravelForm = () => {
     fetchData().catch(console.error);
   }, [destination]);
 
-  console.log(SingaporeData);
+  // console.log(SingaporeData);
 
   return (
     <>

@@ -4,9 +4,14 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import AccordionSubTable from "./AccordionSubTable";
 
 const AccordionDisplay = (props) => {
-  console.log(props.data);
+  const extractedData = props.extractedData;
+  const header = props.data;
+  // console.log(extractedData.lastUpdate);
+  // console.log(extractedData["lastUpdate"]);
+
   const [expanded, setExpanded] = React.useState(false);
 
   const handleChange = (panel) => (event, isExpanded) => {
@@ -23,18 +28,20 @@ const AccordionDisplay = (props) => {
           aria-controls="panel1"
           id="panel1"
         >
-          <Typography sx={{ width: "33%", flexShrink: 0 }}>
-            {props.data}
-          </Typography>
+          <Typography sx={{ width: "33%", flexShrink: 0 }}>{header}</Typography>
           <Typography sx={{ color: "text.secondary" }}>
-            I am an accordion
+            Last Update:{" "}
+            {extractedData.lastUpdate
+              ? extractedData.lastUpdate
+              : "Not available"}
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
+          <AccordionSubTable></AccordionSubTable>
+          {/* <Typography>
             Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat.
             Aliquam eget maximus est, id dignissim quam.
-          </Typography>
+          </Typography> */}
         </AccordionDetails>
       </Accordion>
     </>

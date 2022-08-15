@@ -5,76 +5,31 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AccordionDisplay from "./AccordionDisplay";
+import extractObj from "../utils/utils";
 
 const DisplayInfo = (data) => {
-  //   const [expanded, setExpanded] = React.useState(false);
+  const info = data.data.areaAccessRestriction;
+  const test = extractObj(info.areaHealthPass, ["isRequired", "lastUpdate"]);
+  //   console.log(test);
+  //   console.log(info);
 
-  //   const handleChange = (panel) => (event, isExpanded) => {
-  //     setExpanded(isExpanded ? panel : false);
-  //   };
-
-  const info = data.data;
   const infoHeaders = Object.keys(info);
-  console.log(infoHeaders);
+  //   console.log(infoHeaders);
+
   return (
     <>
-      <div>{info.area.name}</div>
       {infoHeaders.map((header, i) => {
+        // console.log(info, header);
+        const extractedData = info[`${header}`];
+        // console.log(info[`${header}`]);
+        // console.log(Object.values(info))
         return (
           <div key={i}>
-            <AccordionDisplay data={header} />
+            <AccordionDisplay data={header} extractedData={extractedData} />
           </div>
         );
       })}
       /*
-      {/* <Accordion
-        expanded={expanded === "panel1"}
-        onChange={handleChange("panel1")}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1"
-          id="panel1"
-        >
-          <Typography sx={{ width: "33%", flexShrink: 0 }}>
-            General settings
-          </Typography>
-          <Typography sx={{ color: "text.secondary" }}>
-            I am an accordion
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            {info.summary.text}
-            Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat.
-            Aliquam eget maximus est, id dignissim quam.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion
-        expanded={expanded === "panel2"}
-        onChange={handleChange("panel2")}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel2"
-          id="panel2"
-        >
-          <Typography sx={{ width: "33%", flexShrink: 0 }}>
-            General settings
-          </Typography>
-          <Typography sx={{ color: "text.secondary" }}>
-            I am an accordion
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            {info.summary.text}
-            Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat.
-            Aliquam eget maximus est, id dignissim quam.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>{" "} */}
     </>
   );
 };
