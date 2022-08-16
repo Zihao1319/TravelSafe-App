@@ -5,12 +5,21 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AccordionSubTable from "./AccordionSubTable";
+import { extractObj, renameKey } from "../utils/utils";
+
+const newKeys = {
+  ban: "BAN",
+  text: "TEXT",
+  lastUpdate: "LAST",
+  referenceLink: "LINK",
+};
 
 const AccordionDisplay = (props) => {
-  const extractedData = props.extractedData;
-  const header = props.data;
-  // console.log(extractedData.lastUpdate);
-  // console.log(extractedData["lastUpdate"]);
+  console.log(props.data);
+  const data = renameKey(props.data, newKeys);
+  console.log(data);
+  const title = props.title;
+  // console.log(data.lastUpdate);
 
   const [expanded, setExpanded] = React.useState(false);
 
@@ -28,20 +37,21 @@ const AccordionDisplay = (props) => {
           aria-controls="panel1"
           id="panel1"
         >
-          <Typography sx={{ width: "33%", flexShrink: 0 }}>{header}</Typography>
+          <Typography sx={{ width: "33%", flexShrink: 0 }}>{title}</Typography>
           <Typography sx={{ color: "text.secondary" }}>
             Last Update:{" "}
-            {extractedData.lastUpdate
-              ? extractedData.lastUpdate
-              : "Not available"}
+            {data["lastUpdate"] ? data["lastUpdate"] : "Not available"}
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <AccordionSubTable></AccordionSubTable>
-          {/* <Typography>
-            Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat.
-            Aliquam eget maximus est, id dignissim quam.
-          </Typography> */}
+          {data.map((data, i) => {
+            // console.log(data["lastUpdate"]);
+            return (
+              <div key={i}>
+                <AccordionSubTable data={data} />
+              </div>
+            );
+          })}
         </AccordionDetails>
       </Accordion>
     </>

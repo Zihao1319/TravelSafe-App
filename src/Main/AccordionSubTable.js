@@ -6,13 +6,16 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
-const AccordionSubTable = () => {
+const AccordionSubTable = (props) => {
+  const header = Object.keys(props.data);
+  const content = Object.values(props.data);
+
   return (
     <TableContainer>
       <Table>
         <TableRow>
-          <TableCell variant="head">Header</TableCell>
-          <TableCell>Info to be filled</TableCell>
+          <TableCell variant="head">{header}</TableCell>
+          <TableCell>{content}</TableCell>
         </TableRow>
       </Table>
     </TableContainer>
