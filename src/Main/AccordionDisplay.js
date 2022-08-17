@@ -5,21 +5,31 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AccordionSubTable from "./AccordionSubTable";
-import { extractObj, renameKey } from "../utils/utils";
+import { renameKey } from "../utils/utils";
 
 const newKeys = {
-  ban: "BAN",
-  text: "TEXT",
-  lastUpdate: "LAST",
-  referenceLink: "LINK",
+  ban: "Ban",
+  isBanned: "Ban",
+  specialRequirements: "Special requirements",
+  text: "Description",
+  lastUpdate: "Last update",
+  referenceLink: "More info (link)",
+  isRequired: "Required by authorities",
+  duration: "Days of quarantine",
+  healthDocumentationLink: "More info (link)",
+  iosUrl: "iOS Download link",
+  androidUrl: "Android Download link",
+  applicationGuidance: "Application guidance",
+  obtentionMethods: "Method of attainment",
 };
 
 const AccordionDisplay = (props) => {
-  console.log(props.data);
+  // console.log(props.data);
   const data = renameKey(props.data, newKeys);
-  console.log(data);
   const title = props.title;
-  // console.log(data.lastUpdate);
+  const lastUpdate = data[0]["Last update"]
+    ? data[0]["Last update"]
+    : "Not Available";
 
   const [expanded, setExpanded] = React.useState(false);
 
@@ -39,13 +49,12 @@ const AccordionDisplay = (props) => {
         >
           <Typography sx={{ width: "33%", flexShrink: 0 }}>{title}</Typography>
           <Typography sx={{ color: "text.secondary" }}>
-            Last Update:{" "}
-            {data["lastUpdate"] ? data["lastUpdate"] : "Not available"}
+            {/* Last Update: {lastUpdate} */}
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
           {data.map((data, i) => {
-            // console.log(data["lastUpdate"]);
+            // console.log(data, typeof data);
             return (
               <div key={i}>
                 <AccordionSubTable data={data} />
