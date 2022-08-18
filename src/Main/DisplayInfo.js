@@ -11,6 +11,10 @@ const DisplayInfo = (data) => {
   // getting the data from area access restriction nested object
   const info = data.data.areaAccessRestriction;
   const vaccineInfo = info.travelVaccination["qualifiedVaccines"];
+  // // const url = convertToUrl ("https://safetravel.ica.gov.sg/arriving/general-travel/fully-vaccinated")
+  // console.log(url)
+  // const test =  "https://safetravel.ica.gov.sg/arriving/general-travel/fully-vaccinated, https://safetravel.ica.gov.sg/arriving/general-travel/non-fully-vaccinated"
+  // console.log(convertToUrl (test))
   // console.log(extractObj(vaccineInfo, ["supportedVaccineProducts"]));
 
   // console.log(findNestedObj(info.entry, ["lastUpdate", "ban", "text"]));
@@ -43,7 +47,7 @@ const DisplayInfo = (data) => {
     "referenceLink",
   ]);
 
-  console.log(vaccineData);
+  // console.log(vaccineData);
 
   const declarationDocumentsData = extractObj(info.declarationDocuments, [
     "lastUpdate",

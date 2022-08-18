@@ -13,10 +13,10 @@ const newKeys = {
   specialRequirements: "Special requirements",
   text: "Description",
   lastUpdate: "Last update",
-  referenceLink: "More info (link)",
+  referenceLink: "Reference link",
   isRequired: "Required by authorities",
   duration: "Days of quarantine",
-  healthDocumentationLink: "More info (link)",
+  healthDocumentationLink: "Reference link",
   iosUrl: "iOS Download link",
   androidUrl: "Android Download link",
   applicationGuidance: "Application guidance",
@@ -24,12 +24,8 @@ const newKeys = {
 };
 
 const AccordionDisplay = (props) => {
-  // console.log(props.data);
   const data = renameKey(props.data, newKeys);
   const title = props.title;
-  const lastUpdate = data[0]["Last update"]
-    ? data[0]["Last update"]
-    : "Not Available";
 
   const [expanded, setExpanded] = React.useState(false);
 
