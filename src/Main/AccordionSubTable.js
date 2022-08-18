@@ -6,16 +6,11 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import parse from "html-react-parser";
-import { DataArray } from "@mui/icons-material";
 
 const AccordionSubTable = (props) => {
   const header = Object.keys(props.data);
   const data = Object.values(props.data);
-  // console.log(Object.values(data));
-  const content = data[0];
-  // console.log(typeof content)
-  // console.log(header, data, content, typeof content);
-  // const test2 = parse(test);
+  console.log(data);
 
   return (
     <TableContainer>
@@ -23,7 +18,28 @@ const AccordionSubTable = (props) => {
         <TableRow>
           <TableCell variant="head">{header}</TableCell>
           <TableCell>
-            {typeof content === "string" ? parse(content) : content}
+            {data.map((info) => {
+              console.log(info, typeof info);
+              const isArray = Array.isArray(info);
+              console.log(isArray, info);
+
+              if (isArray) {
+                info.forEach((subInfo) => {
+                  console.log(subInfo, typeof subInfo);
+                  return (
+                    <div>
+                      {typeof subInfo === "string" ? parse(subInfo) : subInfo}
+                    </div>
+                  );
+                });
+              } else if (!isArray) {
+                return (
+                  <div>{typeof info === "string" ? parse(info) : info}</div>
+                );
+              }
+            })}
+
+            {/* {typeof content === "string" ? parse(content) : content} */}
           </TableCell>
         </TableRow>
       </Table>

@@ -50,7 +50,7 @@ const AccordionDisplay = (props) => {
         </AccordionSummary>
         <AccordionDetails>
           {data.map((data, i) => {
-            // console.log(data, typeof data);
+            // console.log(data);
             return (
               <div key={i}>
                 <AccordionSubTable data={data} />

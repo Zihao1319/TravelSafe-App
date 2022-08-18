@@ -41,6 +41,8 @@ const DisplayInfo = (data) => {
     "referenceLink",
   ]);
 
+  console.log(travelTestData);
+
   const vaccineData = extractObj(info.travelVaccination, [
     "lastUpdate",
     "isRequired",
