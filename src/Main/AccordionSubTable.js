@@ -10,7 +10,7 @@ import parse from "html-react-parser";
 const AccordionSubTable = (props) => {
   const header = Object.keys(props.data);
   const data = Object.values(props.data);
-  console.log(data);
+  // console.log(data);
 
   return (
     <TableContainer>
@@ -19,22 +19,28 @@ const AccordionSubTable = (props) => {
           <TableCell variant="head">{header}</TableCell>
           <TableCell>
             {data.map((info) => {
-              console.log(info, typeof info);
+              // console.log(header, info, typeof info);
               const isArray = Array.isArray(info);
-              console.log(isArray, info);
+              // console.log(isArray, info);
 
               if (isArray) {
                 info.forEach((subInfo) => {
-                  console.log(subInfo, typeof subInfo);
+                  // console.log(subInfo, typeof subInfo);
                   return (
                     <div>
-                      {typeof subInfo === "string" ? parse(subInfo) : subInfo}
+                      {/* {console.log(subInfo)}
+                      {subInfo} */}
+                      {/* {typeof subInfo === "string" ? parse(subInfo) : subInfo} */}
                     </div>
                   );
                 });
               } else if (!isArray) {
                 return (
-                  <div>{typeof info === "string" ? parse(info) : info}</div>
+                 
+                  <div> 
+                  {/* {console.log(info)} */}
+                  {typeof info === "string" ? parse(info) : info}
+                  </div>
                 );
               }
             })}

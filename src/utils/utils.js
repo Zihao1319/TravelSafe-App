@@ -36,7 +36,7 @@ export const extractObj = (obj = {}, keysToExtract = []) => {
         if (newObj[ObjKey].includes(",")) {
           const urls = newObj[ObjKey].split(",");
           const urlArr = [];
-          console.log(urls);
+          // console.log(urls);
           urls.forEach((url) => {
             urlArr.push(convertToUrl(url));
             // console.log(convertToUrl (url))
@@ -44,7 +44,7 @@ export const extractObj = (obj = {}, keysToExtract = []) => {
           });
 
           newObj[ObjKey] = urlArr;
-          console.log(newObj[ObjKey]);
+          // console.log(newObj[ObjKey]);
           // newObj[ObjKey] = urlArr
           // console.log(newObj[ObjKey])
           // return
@@ -60,7 +60,7 @@ export const extractObj = (obj = {}, keysToExtract = []) => {
       arr.push(newObj);
     }
   }
-  console.log(arr);
+  // console.log(arr);
   return arr;
 };
 

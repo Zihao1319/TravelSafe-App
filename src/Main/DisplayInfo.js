@@ -9,8 +9,12 @@ import { extractObj } from "../utils/utils";
 
 const DisplayInfo = (data) => {
   // getting the data from area access restriction nested object
-  const info = data.data.areaAccessRestriction;
-  const vaccineInfo = info.travelVaccination["qualifiedVaccines"];
+  // const parsedData = JSON.parse(data)
+  // console.log(parsedData)
+  // const data2 = data
+  const info = data.data.areaAccessRestriction || "{}";
+  console.log(info)
+  const vaccineInfo = info.travelVaccination;
   // // const url = convertToUrl ("https://safetravel.ica.gov.sg/arriving/general-travel/fully-vaccinated")
   // console.log(url)
   // const test =  "https://safetravel.ica.gov.sg/arriving/general-travel/fully-vaccinated, https://safetravel.ica.gov.sg/arriving/general-travel/non-fully-vaccinated"
@@ -41,7 +45,7 @@ const DisplayInfo = (data) => {
     "referenceLink",
   ]);
 
-  console.log(travelTestData);
+  // console.log(travelTestData);
 
   const vaccineData = extractObj(info.travelVaccination, [
     "lastUpdate",
@@ -53,13 +57,17 @@ const DisplayInfo = (data) => {
 
   const declarationDocumentsData = extractObj(info.declarationDocuments, [
     "lastUpdate",
+    "text",
+    "description",
     "isRequired",
     "healthDocumentationLink",
+    "travelDocumentationLink",
   ]);
 
   const masksData = extractObj(info.masks, [
     "isRequired",
     "description",
+    "text",
     "referenceLink",
   ]);
 
@@ -93,7 +101,7 @@ const DisplayInfo = (data) => {
     "Entry Requirement": entryData,
     "Travel Test Requirements": travelTestData,
     "Travel Quarantine Requirements": travelQuarantineData,
-    "Approved vaccines": vaccineData,
+    // "Vaccination Info": vaccineData,
     "Health Declaration Documents": declarationDocumentsData,
     "Mask Wearing Requirement": masksData,
     "Tracing Application Info": tracingApplicationData,

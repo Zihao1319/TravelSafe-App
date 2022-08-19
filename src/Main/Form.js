@@ -14,8 +14,8 @@ const reqToken = {
   headers: { "content-type": "application/x-www-form-urlencoded" },
   data: new URLSearchParams({
     grant_type: "client_credentials",
-    client_id: "06FugX4zldyFcrieWkOxT1siu5kKLJY4",
-    client_secret: "9r0RzGdbq94Mvkrw",
+    client_id: "X79WXAh7RmvvERgqxpN4WP7lwvnytvYD",
+    client_secret: "yGNGyhQAFU2P67lc",
   }),
 };
 
@@ -28,7 +28,7 @@ const TravelForm = () => {
   const [destination, setDestination] = useState("");
   const [token, setToken] = useState(null);
   const [randomCountry, setRandomCountry] = useState();
-  const [info, setInfo] = useState();
+  const [info, setInfo] = useState("");
 
   const validate = (values) => {
     const errors = {};
@@ -76,13 +76,21 @@ const TravelForm = () => {
       };
 
       axios.request(data).then((res) => {
-        const data = JSON.stringify(res.data.data);
-        console.log(token, data);
+        console.log(token, res.data.data)
+        const data = res.data.data
+        setInfo (data)
+        // const parsedData = data.json()
+        // const data = JSON.stringify(res.data.data);
+        // setInfo(data)
+        // console.log(token, info);
       });
     };
 
     fetchData().catch(console.error);
-  }, [destination]);
+    
+  },[destination]);
+
+
 
   // console.log(SingaporeData);
 
@@ -103,7 +111,7 @@ const TravelForm = () => {
         ) : null}
         <button type="submit">Submit</button>
       </form>
-      <DisplayInfo data={SingaporeData} />
+      <DisplayInfo data={info} />
     </>
   );
 };
