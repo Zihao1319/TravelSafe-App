@@ -21,6 +21,7 @@ const newKeys = {
   androidUrl: "Android Download link",
   applicationGuidance: "Application guidance",
   obtentionMethods: "Method of attainment",
+  supportedVaccineProducts: "List",
 };
 
 const AccordionDisplay = (props) => {
@@ -44,9 +45,7 @@ const AccordionDisplay = (props) => {
           id="panel1"
         >
           <Typography sx={{ width: "33%", flexShrink: 0 }}>{title}</Typography>
-          <Typography sx={{ color: "text.secondary" }}>
-            {/* Last Update: {lastUpdate} */}
-          </Typography>
+          <Typography sx={{ color: "text.secondary" }}></Typography>
         </AccordionSummary>
         <AccordionDetails>
           {data.map((data, i) => {

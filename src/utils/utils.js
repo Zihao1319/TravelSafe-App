@@ -90,3 +90,40 @@ export const renameKey = (arr, newKeysObj = {}) => {
 // return obj;
 
 // export default extractObj;
+
+export const extractVaccineInfo = (arr, key) => {
+  const tempArr = [];
+  const newArr = [];
+  const obj = {};
+  console.log(arr);
+
+  if (arr === null) {
+    return "";
+  } else {
+    arr.forEach((vaccine) => {
+      tempArr.push(vaccine[key]);
+    });
+    const combinedStr = tempArr.join();
+    // console.log(combinedStr);
+    obj[key] = combinedStr;
+    newArr.push(obj);
+    return newArr;
+  }
+};
+
+// export const extractVaccineInfo2 = (arr, key) => {
+//   arr.reduce(
+//     (prev, curr) => [...prev, ...curr.key]
+//     // console.log(prev[key], curr[key])
+//     // prev[key].concat(curr[key]);
+//   );
+// };
+
+// export const extractVaccineInfo2 = (arr, property) => {
+//   return arr.reduce((acc, obj) => {
+//     const key = obj[property];
+//     acc[key] ??= [];
+//     acc[key].push(obj);
+//     return acc;
+//   }, {});
+// };

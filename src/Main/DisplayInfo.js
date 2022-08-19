@@ -5,16 +5,30 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AccordionDisplay from "./AccordionDisplay";
-import { extractObj } from "../utils/utils";
+import { extractObj, extractVaccineInfo } from "../utils/utils";
 
 const DisplayInfo = (data) => {
   // getting the data from area access restriction nested object
-  // const parsedData = JSON.parse(data)
-  // console.log(parsedData)
-  // const data2 = data
-  const info = data.data.areaAccessRestriction || "{}";
-  console.log(info)
-  const vaccineInfo = info.travelVaccination;
+  const info = data.data.areaAccessRestriction;
+  console.log(info);
+  // const vaccineInfo = info.travelVaccination || null;
+  // const vaccineObj = vaccineInfo["qualifiedVaccines"] || null;
+  // console.log(vaccineObj);
+  // console.log(vaccineObj);
+  // console.log(extractVaccineInfo(vaccineObj, "supportedVaccineProducts"));
+  // const vaccineList = extractVaccineInfo(
+  //   vaccineObj,
+  //   "supportedVaccineProducts"
+  // );
+  // console.log(vaccineList);
+
+  // const vaccineList2 = extractVaccineInfo2(
+  //   vaccineObj,
+  //   "supportedVaccineProducts"
+  // );
+
+  // console.log(vaccineList2);
+
   // // const url = convertToUrl ("https://safetravel.ica.gov.sg/arriving/general-travel/fully-vaccinated")
   // console.log(url)
   // const test =  "https://safetravel.ica.gov.sg/arriving/general-travel/fully-vaccinated, https://safetravel.ica.gov.sg/arriving/general-travel/non-fully-vaccinated"
@@ -34,6 +48,8 @@ const DisplayInfo = (data) => {
 
   const travelTestData = extractObj(info.travelTest, [
     "lastUpdate",
+    "text",
+    "description",
     "isRequired",
     "referenceLink",
   ]);
@@ -45,7 +61,7 @@ const DisplayInfo = (data) => {
     "referenceLink",
   ]);
 
-  // console.log(travelTestData);
+  console.log(travelTestData);
 
   const vaccineData = extractObj(info.travelVaccination, [
     "lastUpdate",
@@ -57,14 +73,15 @@ const DisplayInfo = (data) => {
 
   const declarationDocumentsData = extractObj(info.declarationDocuments, [
     "lastUpdate",
+    "isRequired",
     "text",
     "description",
-    "isRequired",
     "healthDocumentationLink",
     "travelDocumentationLink",
   ]);
 
   const masksData = extractObj(info.masks, [
+    "lastUpdate",
     "isRequired",
     "description",
     "text",
@@ -101,7 +118,8 @@ const DisplayInfo = (data) => {
     "Entry Requirement": entryData,
     "Travel Test Requirements": travelTestData,
     "Travel Quarantine Requirements": travelQuarantineData,
-    // "Vaccination Info": vaccineData,
+    // "Vaccination Info": vaccineData.concat(vaccineList),
+    // "Approved vaccines": vaccineList,
     "Health Declaration Documents": declarationDocumentsData,
     "Mask Wearing Requirement": masksData,
     "Tracing Application Info": tracingApplicationData,
@@ -109,23 +127,25 @@ const DisplayInfo = (data) => {
     "Exit Requirement": exitData,
   };
 
-  //   console.log(dataObj);
+  console.log(dataObj);
+  // console.log(vaccineData.concat(vaccineList));
 
   const infoHeaders = Object.keys(dataObj);
   //   console.log(infoHeaders);
 
   return (
     <>
-      {infoHeaders.map((header, i) => {
-        const subTableData = dataObj[`${header}`];
-        // console.log(subTableData);
-        // console.log(Object.values(info))
-        return (
-          <div key={i}>
-            <AccordionDisplay title={header} data={subTableData} />
-          </div>
-        );
-      })}
+      {info &&
+        infoHeaders.map((header, i) => {
+          const subTableData = dataObj[`${header}`];
+          // console.log(subTableData);
+          // console.log(Object.values(info))
+          return (
+            <div key={i}>
+              <AccordionDisplay title={header} data={subTableData} />
+            </div>
+          );
+        })}
     </>
   );
 };

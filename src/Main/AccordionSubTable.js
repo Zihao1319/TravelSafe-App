@@ -30,16 +30,15 @@ const AccordionSubTable = (props) => {
                     <div>
                       {/* {console.log(subInfo)}
                       {subInfo} */}
-                      {/* {typeof subInfo === "string" ? parse(subInfo) : subInfo} */}
+                      {typeof subInfo === "string" ? parse(subInfo) : subInfo}
                     </div>
                   );
                 });
               } else if (!isArray) {
                 return (
-                 
-                  <div> 
-                  {/* {console.log(info)} */}
-                  {typeof info === "string" ? parse(info) : info}
+                  <div>
+                    {/* {console.log(info)} */}
+                    {typeof info === "string" ? parse(info) : info}
                   </div>
                 );
               }

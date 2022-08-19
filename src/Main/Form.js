@@ -76,23 +76,22 @@ const TravelForm = () => {
       };
 
       axios.request(data).then((res) => {
-        console.log(token, res.data.data)
-        const data = res.data.data
-        setInfo (data)
-        // const parsedData = data.json()
-        // const data = JSON.stringify(res.data.data);
-        // setInfo(data)
-        // console.log(token, info);
+        console.log(token, res.data.data);
+        const data = res.data.data;
+        setInfo(data);
       });
     };
 
-    fetchData().catch(console.error);
-    
-  },[destination]);
-
-
+    if (destination) {
+      fetchData().catch(console.error);
+    }
+  }, [destination]);
 
   // console.log(SingaporeData);
+
+  const isEmpty = Object.keys(info).length === 0;
+  // console.log(info, isNotValid);
+  console.log(info, typeof info, isEmpty);
 
   return (
     <>
@@ -111,7 +110,7 @@ const TravelForm = () => {
         ) : null}
         <button type="submit">Submit</button>
       </form>
-      <DisplayInfo data={info} />
+      {!isEmpty && <DisplayInfo data={info} />}
     </>
   );
 };
