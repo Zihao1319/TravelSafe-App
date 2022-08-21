@@ -1,8 +1,3 @@
-import { ArrowRight } from "@mui/icons-material";
-import { keys } from "@mui/system";
-import { object } from "yup";
-import { array } from "yup/lib/locale";
-
 const convertToUrl = (urlStr) => {
   // const url = urlStr
   // const urlStr = "Click here"
@@ -33,6 +28,7 @@ export const extractObj = (obj = {}, keysToExtract = []) => {
       // );
 
       if (isValidUrl(newObj[ObjKey])) {
+        console.log(newObj[ObjKey]);
         if (newObj[ObjKey].includes(",")) {
           const urls = newObj[ObjKey].split(",");
           const urlArr = [];
@@ -44,6 +40,7 @@ export const extractObj = (obj = {}, keysToExtract = []) => {
           });
 
           newObj[ObjKey] = urlArr;
+          // console.log(newObj[ObjKey]);
           // console.log(newObj[ObjKey]);
           // newObj[ObjKey] = urlArr
           // console.log(newObj[ObjKey])
@@ -60,7 +57,7 @@ export const extractObj = (obj = {}, keysToExtract = []) => {
       arr.push(newObj);
     }
   }
-  // console.log(arr);
+  console.log(arr);
   return arr;
 };
 
@@ -110,20 +107,3 @@ export const extractVaccineInfo = (arr, key) => {
     return newArr;
   }
 };
-
-// export const extractVaccineInfo2 = (arr, key) => {
-//   arr.reduce(
-//     (prev, curr) => [...prev, ...curr.key]
-//     // console.log(prev[key], curr[key])
-//     // prev[key].concat(curr[key]);
-//   );
-// };
-
-// export const extractVaccineInfo2 = (arr, property) => {
-//   return arr.reduce((acc, obj) => {
-//     const key = obj[property];
-//     acc[key] ??= [];
-//     acc[key].push(obj);
-//     return acc;
-//   }, {});
-// };

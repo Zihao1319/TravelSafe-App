@@ -5,6 +5,7 @@ import countryCodes from "./CountryCode";
 import SelectCountry from "./SelectCountry";
 import DisplayInfo from "./DisplayInfo";
 import SingaporeData from "../testdata";
+import ErrorDisplay from "./ErrorDisplay";
 
 const options = countryCodes;
 
@@ -110,7 +111,7 @@ const TravelForm = () => {
         ) : null}
         <button type="submit">Submit</button>
       </form>
-      {!isEmpty && <DisplayInfo data={info} />}
+      {!isEmpty ? <DisplayInfo data={info} /> : <ErrorDisplay />}
     </>
   );
 };

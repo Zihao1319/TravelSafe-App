@@ -5,22 +5,31 @@ import "./App.css";
 import Login from "./Login/Login";
 import SignUp from "./Login/SignUp";
 import TravelForm from "./Main/Form";
+import { ProtectedLayout } from "./ProtectedLayout";
+import { LoggedOutLayout } from "./LoggedOutLayout";
 
 const App = () => {
-  const [login, setLogin] = useState(false);
+  // const [login, setLogin] = useState(false);
 
-  const handleLogin = (e) => {
-    setLogin({ login: true });
-    console.log("Logged in");
-  };
+  // const handleLogin = (e) => {
+  //   setLogin({ login: true });
+  //   console.log("Logged in");
+  // };
 
-  console.log(login);
+  // console.log(login);
   return (
     <>
       <Routes>
-        <Route exact path="/" element={<Login setLogin={handleLogin} />} />
-        <Route exact path="/signup" element={<SignUp />} />
-        <Route exact path="/travelform" element={<TravelForm />} />
+        {/* <Route exact path="/" element={<Login setLogin={handleLogin} />} /> */}
+        <Route path="/signup" element={<SignUp />} />
+
+        <Route element={<LoggedOutLayout />}>
+          <Route path="/login" element={<Login />} />
+        </Route>
+
+        <Route element={<ProtectedLayout />}>
+          <Route path="/" element={<TravelForm />} />
+        </Route>
 
         {/* <Login setLogin={handleLogin} /> */}
         {/* {login && <travelCheck />} */}

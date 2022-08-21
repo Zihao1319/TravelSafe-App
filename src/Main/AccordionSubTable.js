@@ -19,21 +19,26 @@ const AccordionSubTable = (props) => {
           <TableCell variant="head">{header}</TableCell>
           <TableCell>
             {data.map((info) => {
-              // console.log(header, info, typeof info);
               const isArray = Array.isArray(info);
-              // console.log(isArray, info);
+              console.log(header, info, isArray);
 
               if (isArray) {
-                info.forEach((subInfo) => {
-                  // console.log(subInfo, typeof subInfo);
-                  return (
-                    <div>
-                      {/* {console.log(subInfo)}
-                      {subInfo} */}
-                      {typeof subInfo === "string" ? parse(subInfo) : subInfo}
-                    </div>
-                  );
-                });
+                for (let i = 0; i < info.length; i++) {
+                  console.log(header, info[i], info.length);
+                  return <p key={i}>{parse(info[i])}</p>;
+                }
+
+                // return <>{parse(info[0])}</>;
+                // info.forEach((subInfo) => {
+                //   return (
+                //     <div>
+                //       <ul>
+                //         <li>{parse(subInfo)}</li>
+                //       </ul>
+                //       {typeof subInfo === "string" ? parse(subInfo) : subInfo}
+                //     </div>
+                //   );
+                // });
               } else if (!isArray) {
                 return (
                   <div>

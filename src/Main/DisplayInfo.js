@@ -11,15 +11,16 @@ const DisplayInfo = (data) => {
   // getting the data from area access restriction nested object
   const info = data.data.areaAccessRestriction;
   console.log(info);
-  // const vaccineInfo = info.travelVaccination || null;
-  // const vaccineObj = vaccineInfo["qualifiedVaccines"] || null;
+
+  const vaccineInfo = info.travelVaccination;
+  const vaccineObj = vaccineInfo["qualifiedVaccines"] || null;
   // console.log(vaccineObj);
   // console.log(vaccineObj);
   // console.log(extractVaccineInfo(vaccineObj, "supportedVaccineProducts"));
-  // const vaccineList = extractVaccineInfo(
-  //   vaccineObj,
-  //   "supportedVaccineProducts"
-  // );
+  const vaccineList = extractVaccineInfo(
+    vaccineObj,
+    "supportedVaccineProducts"
+  );
   // console.log(vaccineList);
 
   // const vaccineList2 = extractVaccineInfo2(
@@ -68,6 +69,9 @@ const DisplayInfo = (data) => {
     "isRequired",
     "referenceLink",
   ]);
+
+  const combinedVaccineData =
+    vaccineList != "" ? vaccineData.concat(vaccineList) : vaccineData;
 
   // console.log(vaccineData);
 
@@ -118,8 +122,8 @@ const DisplayInfo = (data) => {
     "Entry Requirement": entryData,
     "Travel Test Requirements": travelTestData,
     "Travel Quarantine Requirements": travelQuarantineData,
-    // "Vaccination Info": vaccineData.concat(vaccineList),
-    // "Approved vaccines": vaccineList,
+    "Vaccination Info": combinedVaccineData,
+    // "Approved vaccines": vaccineList || null,
     "Health Declaration Documents": declarationDocumentsData,
     "Mask Wearing Requirement": masksData,
     "Tracing Application Info": tracingApplicationData,
