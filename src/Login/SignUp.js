@@ -3,6 +3,7 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../firebase";
 import Avatar from "@mui/material/Avatar";
@@ -10,7 +11,6 @@ import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import { push, getDatabase, ref as refDatabase, set } from "firebase/database";
-
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
@@ -20,12 +20,18 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
+import { useUserContext } from "../userContext";
 
 const SignUp = () => {
+  const { setUser } = useUserContext();
+
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
+
+  const navigate = useNavigate();
 
   const handleTextChange = (e) => {
     setForm((prev) => ({
@@ -47,7 +53,7 @@ const SignUp = () => {
       await createUserWithEmailAndPassword(auth, form.email, form.password);
 
       // saving the user data into realtime database
-      onAuthStateChanged(auth, (user) => {
+      onAuthStateChanged(auth, async (user) => {
         if (user) {
           const newUserInfo = {
             firstName: form.firstName,
@@ -56,11 +62,22 @@ const SignUp = () => {
             email: form.email,
           };
           const userListRef = refDatabase(database, USER_LIST_FOLDER);
-          const newUser = push(userListRef);
-          set(newUser, newUserInfo);
-          console.log("signed up success!");
+          const newUserRef = push(userListRef);
+          set(newUserRef, newUserInfo);
+
+          // setting the display name
+          const displayName = form.firstName;
+          await updateProfile(auth.currentUser, {
+            displayName: displayName,
+          });
+          setUser({ userName: displayName, uid: user.uid });
+          console.log(user, "signed up success!");
         }
       });
+
+      // await updateProfile(auth.currentUser, { displayName: form.firstName });
+      console.log("set displayName success");
+      navigate("/");
     } catch (err) {
       console.log(err);
       console.log(err.message);

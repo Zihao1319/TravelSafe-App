@@ -23,6 +23,7 @@ import * as yup from "yup";
 const Login = () => {
   const { setUser } = useUserContext();
   const navigate = useNavigate();
+  const [err, setErr] = useState(false);
 
   // const [form, setForm] = useState({ email: "", password: "" });
 
@@ -60,21 +61,19 @@ const Login = () => {
     onSubmit: async (values) => {
       const { email, password } = values;
       try {
-        const user = await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        ).then((response) => {
-          console.log("Login successful");
-        });
-
+        const user = await signInWithEmailAndPassword(auth, email, password);
         if (user) {
-          setUser(user);
-          localStorage.setItems("user", email);
+          console.log("Login successful");
+          console.log(user);
+          setUser({ user: user.user.displayName, uid: user.user.uid });
+          // localStorage.setItems("user", user.user.email);
           navigate("/");
         }
       } catch (err) {
         console.log(err.message);
+        setErr({
+          firebaseErrorMessage: err.message,
+        });
         // setStatus({ firebaseErrorMessage: error.message });
       }
     },
@@ -186,12 +185,13 @@ const Login = () => {
                   onChange={formik.handleChange}
                   helperText={formik.touched.password && formik.errors.password}
                 />
-                <ErrorMessage />
+                {/* <ErrorMessage /> */}
 
                 {/* <FormControlLabel
                   control={<Checkbox value="remember" color="primary" />}
                   label="Remember me"
                 /> */}
+                {err.firebaseErrorMessage && <p>{err.firebaseErrorMessage}</p>}
                 <Button
                   type="submit"
                   fullWidth

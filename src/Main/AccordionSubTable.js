@@ -20,11 +20,11 @@ const AccordionSubTable = (props) => {
           <TableCell>
             {data.map((info) => {
               const isArray = Array.isArray(info);
-              console.log(header, info, isArray);
+              // console.log(header, info, isArray);
 
               if (isArray) {
                 for (let i = 0; i < info.length; i++) {
-                  console.log(header, info[i], info.length);
+                  // console.log(header, info[i], info.length);
                   return <p key={i}>{parse(info[i])}</p>;
                 }
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Button from "@mui/material/Button";
 import { useFormik } from "formik";
 import axios from "axios";
 import countryCodes from "./CountryCode";
@@ -6,6 +7,8 @@ import SelectCountry from "./SelectCountry";
 import DisplayInfo from "./DisplayInfo";
 import SingaporeData from "../testdata";
 import ErrorDisplay from "./ErrorDisplay";
+import { UserContextProvider, useUserContext } from "../userContext";
+import { push, getDatabase, ref as refDatabase, set } from "firebase/database";
 
 const options = countryCodes;
 
@@ -26,6 +29,13 @@ const randomSelect = (arr) => {
 };
 
 const TravelForm = () => {
+  const { user } = useUserContext();
+  console.log(user);
+
+  const userName = user.user;
+  const userID = user.uid;
+  console.log(userName, userID);
+
   const [destination, setDestination] = useState("");
   const [token, setToken] = useState(null);
   const [randomCountry, setRandomCountry] = useState();
@@ -94,10 +104,33 @@ const TravelForm = () => {
   // console.log(info, isNotValid);
   console.log(info, typeof info, isEmpty);
 
+  const saveData = () => {
+    const newData = {
+      ID: user.uid,
+      country: JSON.stringify(info),
+    };
+
+    console.log(newData);
+
+    const database = getDatabase();
+    const DATA_STORAGE = "dataStorage";
+
+    try {
+      const dataStorageRef = refDatabase(database, DATA_STORAGE);
+      const newDataRef = push(dataStorageRef);
+      set(newDataRef, newData);
+      console.log("data saved successfully");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <>
       <form onSubmit={formik.handleSubmit}>
-        <label htmlFor="country">Where would you love to go?</label>
+        <label htmlFor="country">
+          Hello {userName ? userName : ""}, where would you love to go?
+        </label>
 
         <SelectCountry
           placeholder={randomCountry}
@@ -112,6 +145,13 @@ const TravelForm = () => {
         <button type="submit">Submit</button>
       </form>
       {!isEmpty ? <DisplayInfo data={info} /> : <ErrorDisplay />}
+      {!isEmpty ? (
+        <Button variant="contained" onClick={saveData}>
+          Save Data
+        </Button>
+      ) : (
+        ""
+      )}
     </>
   );
 };
