@@ -106,14 +106,15 @@ const TravelForm = () => {
 
   const saveData = () => {
     const newData = {
-      ID: user.uid,
+      // ID: user.uid,
       country: JSON.stringify(info),
+      timeStamp: Date.now(),
     };
 
     console.log(newData);
 
     const database = getDatabase();
-    const DATA_STORAGE = "dataStorage";
+    const DATA_STORAGE = `dataStorage/${user.uid}`;
 
     try {
       const dataStorageRef = refDatabase(database, DATA_STORAGE);
