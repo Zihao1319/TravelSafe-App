@@ -5,6 +5,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { UserContextProvider } from "./userContext";
+import ResponsiveAppBar from "./NavBar";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

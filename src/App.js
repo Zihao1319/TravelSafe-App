@@ -7,6 +7,7 @@ import SignUp from "./Login/SignUp";
 import TravelForm from "./Main/Form";
 import { ProtectedLayout } from "./ProtectedLayout";
 import { LoggedOutLayout } from "./LoggedOutLayout";
+import { Dashboard } from "./Main/Dashboard";
 
 const App = () => {
   // const [login, setLogin] = useState(false);
@@ -22,13 +23,13 @@ const App = () => {
       <Routes>
         {/* <Route exact path="/" element={<Login setLogin={handleLogin} />} /> */}
         <Route path="/signup" element={<SignUp />} />
-
         <Route element={<LoggedOutLayout />}>
           <Route path="/login" element={<Login />} />
         </Route>
 
         <Route element={<ProtectedLayout />}>
           <Route path="/" element={<TravelForm />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Route>
 
         {/* <Login setLogin={handleLogin} /> */}

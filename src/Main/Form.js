@@ -7,6 +7,7 @@ import SelectCountry from "./SelectCountry";
 import DisplayInfo from "./DisplayInfo";
 import SingaporeData from "../testdata";
 import ErrorDisplay from "./ErrorDisplay";
+import ResponsiveAppBar from "../NavBar";
 import { UserContextProvider, useUserContext } from "../userContext";
 import { push, getDatabase, ref as refDatabase, set } from "firebase/database";
 
@@ -106,8 +107,8 @@ const TravelForm = () => {
 
   const saveData = () => {
     const newData = {
-      // ID: user.uid,
-      country: JSON.stringify(info),
+      country: info.area.name,
+      info: JSON.stringify(info),
       timeStamp: Date.now(),
     };
 
