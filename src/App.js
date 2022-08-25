@@ -7,7 +7,7 @@ import SignUp from "./Login/SignUp";
 import TravelForm from "./Main/Form";
 import { ProtectedLayout } from "./ProtectedLayout";
 import { LoggedOutLayout } from "./LoggedOutLayout";
-import { Dashboard } from "./Main/Dashboard";
+import  Dashboard  from "./Main/Dashboard";
 
 const App = () => {
   // const [login, setLogin] = useState(false);

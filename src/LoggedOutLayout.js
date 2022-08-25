@@ -12,8 +12,8 @@ export const LoggedOutLayout = () => {
   return (
     <div>
       {/* <nav> */}
-      <Link to="/signup">Sign up</Link>
-      <Link to="/login">Login</Link>
+      {/* <Link to="/signup">Sign up</Link>
+      <Link to="/login">Login</Link> */}
       {/* </nav> */}
       <Outlet />
     </div>

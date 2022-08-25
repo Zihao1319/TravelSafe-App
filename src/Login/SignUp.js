@@ -5,12 +5,19 @@ import {
   onAuthStateChanged,
   updateProfile,
 } from "firebase/auth";
+// import {
+//   getAuth,
+//   createUserWithEmailAndPassword,
+//   onAuthStateChanged,
+//   updateProfile,
+// } from "firebase/storage";
 import { auth } from "../firebase";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import { push, getDatabase, ref as refDatabase, set } from "firebase/database";
+import { getStorage, ref as refStorage, uploadBytes } from "firebase/storage";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
@@ -22,13 +29,19 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../userContext";
+import Input from '@mui/material/Input';
+// import ButtonBase from "@material-ui/core/ButtonBase";
+
 
 const SignUp = () => {
+  const USER_LIST_FOLDER = "userInfo";
+
   const { setUser } = useUserContext();
 
   const [form, setForm] = useState({
     email: "",
     password: "",
+    imgURL: {file: undefined},
   });
 
   const navigate = useNavigate();
@@ -40,12 +53,22 @@ const SignUp = () => {
     }));
   };
 
-  const USER_LIST_FOLDER = "userInfo";
+
+  const handleImgChange = (e) => {
+    setForm((prev) => ({
+      ...prev, 
+      [e.target.name] : {file: e.target.files[0]}
+
+    }))
+    console.log(form)
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // const auth = getAuth();
     const database = getDatabase();
+    const storage = getStorage()
+
     console.log(form.email, form.password);
 
     // creating account with email and password
@@ -106,6 +129,27 @@ const SignUp = () => {
           </Typography>
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
+           
+            <Grid item xs={12}>
+            <TextField
+              variant="standard"
+              InputProps={{ disableUnderline: true }}
+              margin="normal"
+              label="Profile picture:"
+              fullWidth
+              disabled
+            />
+                <Input
+                  required
+                  accept = "image/*"
+                  type= "file"
+                  fullWidth
+                  id="image"
+                  name="image"
+                  hidden
+                  onChange={handleImgChange}
+                />
+              </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
