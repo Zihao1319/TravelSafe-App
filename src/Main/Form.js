@@ -33,7 +33,7 @@ const TravelForm = () => {
   const { user } = useUserContext();
   console.log(user);
 
-  const userName = user.user;
+  const userName = user.userName;
   const userID = user.uid;
   console.log(userName, userID);
 
@@ -103,7 +103,7 @@ const TravelForm = () => {
 
   const isEmpty = Object.keys(info).length === 0;
   // console.log(info, isNotValid);
-  console.log(info, typeof info, isEmpty);
+  // console.log(info, typeof info, isEmpty);
 
   const saveData = () => {
     const newData = {

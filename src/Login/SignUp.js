@@ -29,20 +29,24 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../userContext";
-import Input from '@mui/material/Input';
-// import ButtonBase from "@material-ui/core/ButtonBase";
+import Input from "@mui/material/Input";
+import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
+import * as yup from "yup";
 
+// import ButtonBase from "@material-ui/core/ButtonBase";
 
 const SignUp = () => {
   const USER_LIST_FOLDER = "userInfo";
-
   const { setUser } = useUserContext();
 
   const [form, setForm] = useState({
     email: "",
     password: "",
-    imgURL: {file: undefined},
+    imgURL: { file: undefined },
   });
+
+  const [imgStatus, setImageStatus] = useState(false);
+  const [emailStatus, setEmailStatus] = useState(true);
 
   const navigate = useNavigate();
 
@@ -53,59 +57,130 @@ const SignUp = () => {
     }));
   };
 
-
   const handleImgChange = (e) => {
     setForm((prev) => ({
-      ...prev, 
-      [e.target.name] : {file: e.target.files[0]}
+      ...prev,
+      [e.target.name]: { file: e.target.files[0] },
+    }));
+    console.log(e.target.files[0]);
 
-    }))
-    console.log(form)
-  }
+    //checking if the file type is image
+    const isImg = e.target.files[0]["type"].split("/")[0] === "image";
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    // const auth = getAuth();
-    const database = getDatabase();
-    const storage = getStorage()
-
-    console.log(form.email, form.password);
-
-    // creating account with email and password
-    try {
-      await createUserWithEmailAndPassword(auth, form.email, form.password);
-
-      // saving the user data into realtime database
-      onAuthStateChanged(auth, async (user) => {
-        if (user) {
-          const newUserInfo = {
-            firstName: form.firstName,
-            lastName: form.lastName,
-            ID: user.uid,
-            email: form.email,
-          };
-          const userListRef = refDatabase(database, USER_LIST_FOLDER);
-          const newUserRef = push(userListRef);
-          set(newUserRef, newUserInfo);
-
-          // setting the display name
-          const displayName = form.firstName;
-          await updateProfile(auth.currentUser, {
-            displayName: displayName,
-          });
-          setUser({ userName: displayName, uid: user.uid });
-          console.log(user, "signed up success!");
-        }
-      });
-
-      // await updateProfile(auth.currentUser, { displayName: form.firstName });
-      console.log("set displayName success");
-      navigate("/");
-    } catch (err) {
-      console.log(err);
-      console.log(err.message);
+    if (isImg) {
+      console.log("file is image type");
+      setImageStatus({ imgType: true });
+    } else {
+      console.log("file not image type");
+      setImageStatus({ imgType: false });
     }
   };
+
+  const validationSchema = yup.object().shape({
+    firstName: yup.string().required("What's your first name?"),
+    lastName: yup.string().required("What's your last name?"),
+    email: yup
+      .string("Enter your email")
+      .email("Enter a valid email")
+      .required("Email is required"),
+    password: yup
+      .string("Enter your password")
+      .min(6, "Password should be of minimum 6 characters length")
+      .required("Password is required"),
+  });
+
+  const formik = useFormik({
+    initialValues: { firstName: "", lastName: "", email: "", password: "" },
+    validationSchema: validationSchema,
+
+    onSubmit: async (values) => {
+      const { firstName, lastName, email, password } = values;
+      const database = getDatabase();
+
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+
+        // saving the user data into realtime database
+        onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            const newUserInfo = {
+              firstName: firstName,
+              lastName: lastName,
+              ID: user.uid,
+              email: email,
+            };
+            const userListRef = refDatabase(database, USER_LIST_FOLDER);
+            const newUserRef = push(userListRef);
+            set(newUserRef, newUserInfo);
+
+            // setting the display name
+            const displayName = firstName;
+            await updateProfile(auth.currentUser, {
+              displayName: displayName,
+            });
+
+            setUser({ userName: displayName, uid: user.uid });
+            console.log(user, "signed up success!");
+          }
+        });
+
+        // await updateProfile(auth.currentUser, { displayName: form.firstName });
+        console.log("set displayName success");
+        navigate("/");
+      } catch (err) {
+        console.log(err);
+        console.log(err.message);
+
+        if (err === "Firebase: Error (auth/email-already-in-use)") {
+          console.log("email already in use");
+        }
+      }
+    },
+  });
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   // const auth = getAuth();
+  //   const database = getDatabase();
+  //   const storage = getStorage();
+
+  //   console.log(form.email, form.password);
+
+  //   // creating account with email and password
+  //   try {
+  //     await createUserWithEmailAndPassword(auth, form.email, form.password);
+
+  //     // saving the user data into realtime database
+  //     onAuthStateChanged(auth, async (user) => {
+  //       if (user) {
+  //         const newUserInfo = {
+  //           firstName: form.firstName,
+  //           lastName: form.lastName,
+  //           ID: user.uid,
+  //           email: form.email,
+  //         };
+  //         const userListRef = refDatabase(database, USER_LIST_FOLDER);
+  //         const newUserRef = push(userListRef);
+  //         set(newUserRef, newUserInfo);
+
+  //         // setting the display name
+  //         const displayName = form.firstName;
+  //         await updateProfile(auth.currentUser, {
+  //           displayName: displayName,
+  //         });
+  //         setUser({ userName: displayName, uid: user.uid });
+  //         console.log(user, "signed up success!");
+  //       }
+  //     });
+
+  //     // await updateProfile(auth.currentUser, { displayName: form.firstName });
+  //     console.log("set displayName success");
+  //     navigate("/");
+  //   } catch (err) {
+  //     console.log(err);
+  //     console.log(err.message);
+  //   }
+  // };
 
   const theme = createTheme();
 
@@ -127,28 +202,43 @@ const SignUp = () => {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-           
-            <Grid item xs={12}>
-            <TextField
-              variant="standard"
-              InputProps={{ disableUnderline: true }}
-              margin="normal"
-              label="Profile picture:"
-              fullWidth
-              disabled
-            />
+              <Grid item xs={12}>
+                <TextField
+                  variant="standard"
+                  InputProps={{ disableUnderline: true }}
+                  margin="normal"
+                  label="Profile picture:"
+                  fullWidth
+                  disabled
+                  error={imgStatus.imgType === false}
+                  onChange={formik.handleChange}
+                  helperText={
+                    imgStatus.imgType === false
+                      ? "Please upload a png or jpeg file"
+                      : ""
+                  }
+                />
                 <Input
+                  error={imgStatus.imgType === false}
                   required
-                  accept = "image/*"
-                  type= "file"
+                  accept="image/*"
+                  type="file"
                   fullWidth
                   id="image"
                   name="image"
                   hidden
-                  onChange={handleImgChange}
+                  onChange={formik.handleChange}
                 />
+                {/* {status.imgType === false && (
+                  <TextField
+                    error
+                    helperText="Please upload a png or jpeg file"
+                    id="outlined-error"
+                    disabled
+                  />
+                )} */}
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -159,7 +249,14 @@ const SignUp = () => {
                   id="firstName"
                   label="First Name"
                   autoFocus
-                  onChange={handleTextChange}
+                  onChange={formik.handleChange}
+                  value={formik.values.firstName}
+                  error={
+                    formik.touched.firstName && Boolean(formik.errors.firstName)
+                  }
+                  helperText={
+                    formik.touched.firstName && formik.errors.firstName
+                  }
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -170,18 +267,27 @@ const SignUp = () => {
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
-                  onChange={handleTextChange}
+                  onChange={formik.handleChange}
+                  value={formik.values.lastName}
+                  error={
+                    formik.touched.lastName && Boolean(formik.errors.lastName)
+                  }
+                  helperText={formik.touched.lastName && formik.errors.lastName}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  // error = {}
                   required
                   fullWidth
                   id="email"
                   label="Email Address"
                   name="email"
                   autoComplete="email"
-                  onChange={handleTextChange}
+                  onChange={formik.handleChange}
+                  value={formik.values.email}
+                  error={formik.touched.email && Boolean(formik.errors.email)}
+                  helperText={formik.touched.email && formik.errors.email}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -193,7 +299,12 @@ const SignUp = () => {
                   type="password"
                   id="password"
                   autoComplete="new-password"
-                  onChange={handleTextChange}
+                  onChange={formik.handleChange}
+                  value={formik.values.password}
+                  error={
+                    formik.touched.password && Boolean(formik.errors.password)
+                  }
+                  helperText={formik.touched.password && formik.errors.password}
                 />
               </Grid>
               {/* <Grid item xs={12}>
@@ -208,6 +319,7 @@ const SignUp = () => {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={imgStatus.imgType === false}
             >
               Sign Up
             </Button>

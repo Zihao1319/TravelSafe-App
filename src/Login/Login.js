@@ -62,10 +62,11 @@ const Login = () => {
       const { email, password } = values;
       try {
         const user = await signInWithEmailAndPassword(auth, email, password);
+
         if (user) {
           console.log("Login successful");
           console.log(user);
-          setUser({ user: user.user.displayName, uid: user.user.uid });
+          setUser({ userName: user.user.displayName, uid: user.user.uid });
           // localStorage.setItems("user", user.user.email);
           navigate("/");
         }
