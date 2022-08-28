@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Navigate, Outlet } from "react-router-dom";
 import { useUserContext } from "./userContext";
-import ResponsiveAppBar from "./NavBar";
+import NavBar from "./NavBar2";
 
 export const ProtectedLayout = () => {
   const { user } = useUserContext();
@@ -11,7 +11,7 @@ export const ProtectedLayout = () => {
   }
   return (
     <div>
-      <ResponsiveAppBar />
+      <NavBar />
       {/* <Link to="/">Home </Link> */}
       <Outlet />
     </div>

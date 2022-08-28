@@ -64,11 +64,11 @@ const Login = () => {
         const user = await signInWithEmailAndPassword(auth, email, password);
 
         if (user) {
-          console.log("Login successful");
           console.log(user);
           setUser({ userName: user.user.displayName, uid: user.user.uid });
           // localStorage.setItems("user", user.user.email);
           navigate("/");
+          console.log("Login successful");
         }
       } catch (err) {
         console.log(err.message);

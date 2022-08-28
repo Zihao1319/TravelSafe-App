@@ -7,17 +7,10 @@ import SignUp from "./Login/SignUp";
 import TravelForm from "./Main/Form";
 import { ProtectedLayout } from "./ProtectedLayout";
 import { LoggedOutLayout } from "./LoggedOutLayout";
-import  Dashboard  from "./Main/Dashboard";
+import Dashboard from "./Main/Dashboard";
+import Profile from "./Login/Profile";
 
 const App = () => {
-  // const [login, setLogin] = useState(false);
-
-  // const handleLogin = (e) => {
-  //   setLogin({ login: true });
-  //   console.log("Logged in");
-  // };
-
-  // console.log(login);
   return (
     <>
       <Routes>
@@ -30,6 +23,7 @@ const App = () => {
         <Route element={<ProtectedLayout />}>
           <Route path="/" element={<TravelForm />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
 
         {/* <Login setLogin={handleLogin} /> */}

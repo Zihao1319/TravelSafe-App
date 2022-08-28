@@ -36,45 +36,44 @@ import * as yup from "yup";
 // import ButtonBase from "@material-ui/core/ButtonBase";
 
 const SignUp = () => {
-  const USER_LIST_FOLDER = "userInfo";
   const { setUser } = useUserContext();
 
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-    imgURL: { file: undefined },
-  });
+  // const [form, setForm] = useState({
+  //   email: "",
+  //   password: "",
+  //   imgURL: { file: undefined },
+  // });
 
-  const [imgStatus, setImageStatus] = useState(false);
-  const [emailStatus, setEmailStatus] = useState(true);
+  // const [imgStatus, setImageStatus] = useState(false);
+  // const [emailStatus, setEmailStatus] = useState(true);
 
   const navigate = useNavigate();
 
-  const handleTextChange = (e) => {
-    setForm((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
+  // const handleTextChange = (e) => {
+  //   setForm((prev) => ({
+  //     ...prev,
+  //     [e.target.name]: e.target.value,
+  //   }));
+  // };
 
-  const handleImgChange = (e) => {
-    setForm((prev) => ({
-      ...prev,
-      [e.target.name]: { file: e.target.files[0] },
-    }));
-    console.log(e.target.files[0]);
+  // const handleImgChange = (e) => {
+  //   setForm((prev) => ({
+  //     ...prev,
+  //     [e.target.name]: { file: e.target.files[0] },
+  //   }));
+  //   console.log(e.target.files[0]);
 
-    //checking if the file type is image
-    const isImg = e.target.files[0]["type"].split("/")[0] === "image";
+  //   //checking if the file type is image
+  //   const isImg = e.target.files[0]["type"].split("/")[0] === "image";
 
-    if (isImg) {
-      console.log("file is image type");
-      setImageStatus({ imgType: true });
-    } else {
-      console.log("file not image type");
-      setImageStatus({ imgType: false });
-    }
-  };
+  //   if (isImg) {
+  //     console.log("file is image type");
+  //     setImageStatus({ imgType: true });
+  //   } else {
+  //     console.log("file not image type");
+  //     setImageStatus({ imgType: false });
+  //   }
+  // };
 
   const validationSchema = yup.object().shape({
     firstName: yup.string().required("What's your first name?"),
@@ -106,12 +105,13 @@ const SignUp = () => {
             const newUserInfo = {
               firstName: firstName,
               lastName: lastName,
-              ID: user.uid,
               email: email,
+              id: user.uid,
+              photoURL: "",
             };
-            const userListRef = refDatabase(database, USER_LIST_FOLDER);
-            const newUserRef = push(userListRef);
-            set(newUserRef, newUserInfo);
+            const userListRef = refDatabase(database, `userInfo/ ${user.uid}`);
+            // const newUserRef = push(userListRef);
+            set(userListRef, newUserInfo);
 
             // setting the display name
             const displayName = firstName;
@@ -119,6 +119,7 @@ const SignUp = () => {
               displayName: displayName,
             });
 
+            // change this to setUser (firstname, lastname, uid, email, photourl), probably can remove displayname, just use firstname will do
             setUser({ userName: displayName, uid: user.uid });
             console.log(user, "signed up success!");
           }
@@ -205,7 +206,7 @@ const SignUp = () => {
           <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <TextField
+                {/* <TextField
                   variant="standard"
                   InputProps={{ disableUnderline: true }}
                   margin="normal"
@@ -230,7 +231,7 @@ const SignUp = () => {
                   name="image"
                   hidden
                   onChange={formik.handleChange}
-                />
+                /> */}
                 {/* {status.imgType === false && (
                   <TextField
                     error
@@ -319,7 +320,7 @@ const SignUp = () => {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              disabled={imgStatus.imgType === false}
+              // disabled={imgStatus.imgType === false}
             >
               Sign Up
             </Button>
