@@ -33,7 +33,7 @@ const TravelForm = () => {
   const { user } = useUserContext();
   console.log(user);
 
-  const userName = user.userName;
+  const userName = user.firstName;
   const userID = user.uid;
   console.log(userName, userID);
 

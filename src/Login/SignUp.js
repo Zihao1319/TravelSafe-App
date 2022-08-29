@@ -106,27 +106,28 @@ const SignUp = () => {
               firstName: firstName,
               lastName: lastName,
               email: email,
-              id: user.uid,
+              uid: user.uid,
               photoURL: "",
             };
             const userListRef = refDatabase(database, `userInfo/ ${user.uid}`);
             // const newUserRef = push(userListRef);
             set(userListRef, newUserInfo);
+            setUser (newUserInfo)
 
             // setting the display name
-            const displayName = firstName;
-            await updateProfile(auth.currentUser, {
-              displayName: displayName,
-            });
+            // const displayName = firstName;
+            // await updateProfile(auth.currentUser, {
+            //   displayName: displayName,
+            // });
 
             // change this to setUser (firstname, lastname, uid, email, photourl), probably can remove displayname, just use firstname will do
-            setUser({ userName: displayName, uid: user.uid });
+            // setUser({ userName: displayName, uid: user.uid });
             console.log(user, "signed up success!");
           }
         });
 
         // await updateProfile(auth.currentUser, { displayName: form.firstName });
-        console.log("set displayName success");
+        // console.log("set displayName success");
         navigate("/");
       } catch (err) {
         console.log(err);

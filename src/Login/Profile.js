@@ -5,6 +5,9 @@ import {
   getDatabase,
   ref as refDatabase,
   onValue,
+  update,
+  set,
+  setValue
 } from "firebase/database";
 import {
   getStorage,
@@ -40,40 +43,30 @@ const Profile = () => {
 
   const handleImgChange = async (e) => {
     // e.preventDefault();
-    console.log("image");
     const filePath = e.target.files[0];
+    // const isImg = e.target.files[0]["type"].split("/")[0] === "image";
+    // console.log(isImg)
     setImgFile({ file: filePath });
-
     const storage = getStorage();
     const fileRef = refStorage(storage, `userPictureFolder/${user.uid}`);
     console.log(imgFile.file);
 
     await uploadBytes(fileRef, imgFile.file);
     const imgDownloadUrl = await getDownloadURL(fileRef);
-
     console.log(imgFile, imgDownloadUrl);
 
+
+    // setUser ((prev) => ({...prev}, {photo: imgDownloadUrl}))
+    console.log(user)
+
     const database = getDatabase();
-    const userRef = refDatabase(database, `userInfo/${user.uid}`);
+    const userRef = refDatabase(database, `userInfo/${user.uid}/photoURL`);
+    console.log(userRef)
+    update(userRef, {imgDownloadUrl})
+
+    // console.log(photoRef)
+
   };
-
-  // retrieving user info from firebase realtime database
-  const database = getDatabase();
-  const userRef = refDatabase(database, `userInfo/ ${user.uid}`);
-
-  //   // results in infinite loop if runs, put this under useEffect
-  //   onValue(userRef, (snapshot) => {
-  //     const userData = snapshot.val();
-  //     setUser({
-  //       email: userData.email,
-  //       firstName: userData.firstName,
-  //       lastName: userData.lastName,
-  //       photo: userData.photoURL,
-  //       uid: user.uid,
-  //     });
-  //   });
-
-  //   console.log(user);
 
   return (
     <Box

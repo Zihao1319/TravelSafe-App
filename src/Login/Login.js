@@ -18,21 +18,18 @@ import { PropaneRounded, PropaneSharp } from "@mui/icons-material";
 import { useUserContext } from "../userContext";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
+import {
+  get,
+  getDatabase,
+  ref as refDatabase,
+  onValue,
+} from "firebase/database";
 import * as yup from "yup";
 
 const Login = () => {
-  const { setUser } = useUserContext();
+  const { user, setUser } = useUserContext();
   const navigate = useNavigate();
   const [err, setErr] = useState(false);
-
-  // const [form, setForm] = useState({ email: "", password: "" });
-
-  // const handleTextChange = (e) => {
-  //   setForm((prev) => ({
-  //     ...prev,
-  //     [e.target.name]: e.target.value,
-  //   }));
-  // };
 
   const validationSchema = yup.object({
     email: yup
@@ -45,16 +42,6 @@ const Login = () => {
       .required("Password is required"),
   });
 
-  // const validate = (values) => {
-  //   const errors = {};
-
-  //   if (!values.country) {
-  //     errors.country = "Please choose a destination";
-  //   }
-
-  //   return errors;
-  // };
-
   const formik = useFormik({
     initialValues: { email: "", password: "" },
     validationSchema: validationSchema,
@@ -64,8 +51,22 @@ const Login = () => {
         const user = await signInWithEmailAndPassword(auth, email, password);
 
         if (user) {
-          console.log(user);
-          setUser({ userName: user.user.displayName, uid: user.user.uid });
+          const database = getDatabase();
+          const userRef = refDatabase(database, `userInfo/ ${user.user.uid}`);
+          onValue(userRef, (snapshot) => {
+           const userData = snapshot.val();
+           setUser({
+             email: userData.email,
+             firstName: userData.firstName,
+             lastName: userData.lastName,
+             photo: userData.photoURL,
+             uid: user.user.uid,
+           });
+
+         });
+         console.log(user);
+
+          // setUser({ userName: user.user.displayName, uid: user.user.uid });
           // localStorage.setItems("user", user.user.email);
           navigate("/");
           console.log("Login successful");
