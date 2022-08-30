@@ -5,67 +5,69 @@ import Typography from "@mui/material/Typography";
 import Input from "@mui/material/Input";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-
-
+import { randomSelect } from "../utils/utils";
 
 const Dashboard = () => {
   const { user, setUser } = useUserContext();
-  const [file, setFile] = useState ({file: "", text: ""});
+  const [file, setFile] = useState({ file: "", text: "" });
+
+  const placeholderList = [
+    "Vaccination records",
+    "Air ticket",
+    "IC",
+    "Passport",
+    "Accomodation proofs",
+    "Train ticket",
+    "",
+  ];
+
+  const placeholder = placeholderList[randomSelect(placeholderList)];
 
   const handleFileChange = (e) => {
-    setFile ((prevState) => ({
-      ...prevState, [e.target.name]: e.target.files[0]
-    }))
-  }
+    setFile((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.files[0],
+    }));
+  };
 
   const handleTextChange = (e) => {
-    setFile ((prevState) => ({
-      ...prevState, [e.target.name]: e.target.value
-    }))
-  }
+    setFile((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
-
-  const handleFileUpload = async (e) => {
-    
-  }
-
-
+  const handleFileUpload = async (e) => {};
 
   return (
-  <>
-
-    <Box
-      justifyContent="center"
-      alignItems="center"
-      display="flex"
-      component = "form"
-      sx={{ display: "flex", flexDirection: "column", m: 5, mx: "auto" }}
+    <>
+      <Box
+        justifyContent="center"
+        alignItems="center"
+        display="flex"
+        component="form"
+        sx={{ display: "flex", flexDirection: "column", m: 5, mx: "auto" }}
       >
-      <Typography variant="h5" sx={{ p: 2 }}>
-        What do you want to store?
-      </Typography>
-                <Input type="file" name="file" onChange = {handleFileChange} />
-                <TextField
-                  margin="normal"
-                  required
-                  id="text"
-                  label="File description"
-                  name="text"
-                  autoFocus
-                  onChange={handleTextChange}
-                />
-    
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  Upload
-                </Button>
-              </Box>
-  
-  
-  </>
+        <Typography variant="h5" sx={{ p: 2 }}>
+          All your travel needs in one place
+        </Typography>
+        <Input type="file" name="file" onChange={handleFileChange} />
+        <TextField
+          margin="normal"
+          required
+          id="text"
+          label="What's this?"
+          placeholder={placeholder}
+          name="text"
+          autoFocus
+          onChange={handleTextChange}
+        />
+
+        <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
+          Upload
+        </Button>
+      </Box>
+    </>
   );
 };
 

@@ -27,7 +27,7 @@ const Profile = () => {
   const { user, setUser } = useUserContext();
   const [imgFile, setImgFile] = useState();
 
-  console.log(user)
+  console.log(user);
 
   //   const auth = getAuth();
   //   const userInfo = auth.currentUser;
@@ -66,15 +66,15 @@ const Profile = () => {
 
       // updating new profile pic on realtime database
       const userRef = refDatabase(database, `userInfo/ ${user.uid}`);
-      update (userRef, {photoURL: imgDownloadUrl})
-      setUser ((prev) => ({
+      update(userRef, { photoURL: imgDownloadUrl });
+      setUser((prev) => ({
         ...prev,
         photoURL: imgDownloadUrl,
-      }))
+      }));
 
-      setImgFile ("")
+      setImgFile("");
+    }
   };
-}
 
   return (
     <Box

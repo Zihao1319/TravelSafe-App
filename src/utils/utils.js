@@ -107,3 +107,8 @@ export const extractVaccineInfo = (arr, key) => {
     return newArr;
   }
 };
+
+export const randomSelect = (arr) => {
+  let num = Math.floor(Math.random() * arr.length);
+  return num;
+};

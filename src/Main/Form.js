@@ -10,6 +10,7 @@ import ErrorDisplay from "./ErrorDisplay";
 import ResponsiveAppBar from "../NavBar";
 import { UserContextProvider, useUserContext } from "../userContext";
 import { push, getDatabase, ref as refDatabase, set } from "firebase/database";
+import { randomSelect } from "../utils/utils";
 
 const options = countryCodes;
 
@@ -24,10 +25,10 @@ const reqToken = {
   }),
 };
 
-const randomSelect = (arr) => {
-  let num = Math.floor(Math.random() * arr.length);
-  return num;
-};
+// const randomSelect = (arr) => {
+//   let num = Math.floor(Math.random() * arr.length);
+//   return num;
+// };
 
 const TravelForm = () => {
   const { user } = useUserContext();
