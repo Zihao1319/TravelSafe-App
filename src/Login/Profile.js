@@ -7,8 +7,6 @@ import {
   onValue,
   update,
   set,
-  child,
-  setValue,
 } from "firebase/database";
 import {
   getStorage,
@@ -29,6 +27,8 @@ const Profile = () => {
   const { user, setUser } = useUserContext();
   const [imgFile, setImgFile] = useState();
   const [imgURL, setImgURL] = useState();
+
+  console.log(user)
 
   //   const auth = getAuth();
   //   const userInfo = auth.currentUser;
@@ -58,6 +58,7 @@ const Profile = () => {
 
     if (imgFile) {
       console.log("start of upload");
+      // storing the profile pic into firebase storage
       const storage = getStorage();
       const fileRef = refStorage(storage, `userPictureFolder/${user.uid}`);
       await uploadBytes(fileRef, imgFile);
@@ -65,48 +66,15 @@ const Profile = () => {
       console.log(imgDownloadUrl);
       setImgURL(imgDownloadUrl);
 
-      // const userRef = refDatabase(database, "userInfo/" + `${user.uid}`);
-      // console.log(child(refDatabase(database), `${user.uid}`).key);
-      // console.log(
-      //   child(refDatabase(database), `userInfo/${user.uid}/photoURL`).key
-      // );
-
-      const ref = child(refDatabase(database), `/userInfo/${user.uid}`);
-      const updatedURL = {
+      // updating new profile pic on realtime database
+      const userRef = refDatabase(database, `userInfo/ ${user.uid}`);
+      update (userRef, {photoURL: imgDownloadUrl})
+      setUser ((prev) => ({
+        ...prev,
         photoURL: imgDownloadUrl,
-      };
-
-      // const userRef = child(refDatabase(database), `userInfo`);
-      // console.log(userRef);
-      // update(userRef, {photo}
-
-      // console.log(userRef, child(database));
-      // update(userRef, { photoURL: imgDownloadUrl });
-    }
-
-    // fileRef.on("state_changed",
-    // (snapshot) => {
-    //   console.log(snapshot)
-    // }, (err) => {
-    //   console.log(err)
-    // }, () => {
-
-    // }
-    // )
-
-    // const fileRef = refStorage(storage, `userPictureFolder/` + `${user.uid}`);
-    // console.log(imgFile.file);
-
-    // // setUser ((prev) => ({...prev}, {photo: imgDownloadUrl}))
-    // console.log(user);
-
-    // const database = getDatabase();
-    // const userRef = refDatabase(database, `userInfo/${user.uid}`);
-    // console.log(userRef);
-    // update(userRef, { photoURL: imgDownloadUrl });
-
-    // console.log(photoRef)
+      }))
   };
+}
 
   return (
     <Box
@@ -121,7 +89,7 @@ const Profile = () => {
       <Avatar
         alt="Say cheese!"
         // src={user.photo ? user.photo : "/broken-image.jpg"}
-        src={imgURL ? imgURL : "/broken-image.jpg"}
+        src={user.photoURL ? user.photoURL : "/broken-image.jpg"}
         sx={{ width: 100, height: 100 }}
       />
       <Button
