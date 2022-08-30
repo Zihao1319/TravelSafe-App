@@ -26,7 +26,6 @@ import Box from "@mui/material/Box";
 const Profile = () => {
   const { user, setUser } = useUserContext();
   const [imgFile, setImgFile] = useState();
-  const [imgURL, setImgURL] = useState();
 
   console.log(user)
 
@@ -64,7 +63,6 @@ const Profile = () => {
       await uploadBytes(fileRef, imgFile);
       const imgDownloadUrl = await getDownloadURL(fileRef);
       console.log(imgDownloadUrl);
-      setImgURL(imgDownloadUrl);
 
       // updating new profile pic on realtime database
       const userRef = refDatabase(database, `userInfo/ ${user.uid}`);
@@ -73,6 +71,8 @@ const Profile = () => {
         ...prev,
         photoURL: imgDownloadUrl,
       }))
+
+      setImgFile ("")
   };
 }
 

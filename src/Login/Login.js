@@ -59,7 +59,7 @@ const Login = () => {
              email: userData.email,
              firstName: userData.firstName,
              lastName: userData.lastName,
-             photo: userData.photoURL,
+             photoURL: userData.photoURL,
              uid: user.user.uid,
            });
 
