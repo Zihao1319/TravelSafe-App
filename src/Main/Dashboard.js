@@ -1,15 +1,32 @@
 import { useUserContext } from "../userContext";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Input from "@mui/material/Input";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { randomSelect } from "../utils/utils";
+import {
+  get,
+  getDatabase,
+  ref as refDatabase,
+  onValue,
+  update,
+  set,
+  onChildAdded
+} from "firebase/database";
+
+import {
+  getStorage,
+  ref as refStorage,
+  uploadBytes,
+  getDownloadURL,
+} from "firebase/storage";
 
 const Dashboard = () => {
   const { user, setUser } = useUserContext();
-  const [file, setFile] = useState({ file: "", text: "" });
+  const [file, setFile] = useState({ file: "", text: "", ts: "" });
+  const [post, setPost] = useState ([])
 
   const placeholderList = [
     "Vaccination records",
@@ -18,10 +35,12 @@ const Dashboard = () => {
     "Passport",
     "Accomodation proofs",
     "Train ticket",
-    "",
+    "Insurance",
   ];
 
   const placeholder = placeholderList[randomSelect(placeholderList)];
+  const database = getDatabase();
+  const ts = new Date().toUTCString();
 
   const handleFileChange = (e) => {
     setFile((prevState) => ({
@@ -29,6 +48,7 @@ const Dashboard = () => {
       [e.target.name]: e.target.files[0],
     }));
   };
+  
 
   const handleTextChange = (e) => {
     setFile((prevState) => ({
@@ -37,7 +57,46 @@ const Dashboard = () => {
     }));
   };
 
-  const handleFileUpload = async (e) => {};
+  const handleFileUpload = async (e) => {
+    e.preventDefault();
+    const filePath = file.file
+
+    if (filePath) {
+      console.log("start of upload");
+      console.log(filePath)
+      // storing the file into firebase storage
+      const storage = getStorage();
+      // console.log(ts)
+
+      // need time stamp so as to get individual files
+      const fileRef = refStorage(storage, `userDocsFolder/${user.uid}/${ts}`);
+
+      await uploadBytes(fileRef, filePath);
+      const fileDownloadUrl = await getDownloadURL(fileRef);
+
+      // updating the download url and text info on realtime database
+      const userFileRef = refDatabase(database, `userDocs/ ${user.uid} / ${ts}`);
+      set (userFileRef, {docUrl: fileDownloadUrl, text: file.text})
+    }
+  };
+
+  useEffect(() => {
+    console.log("woohooaa")
+    const fetchPost = async () => {
+      const userFileRef = await refDatabase (database, `userDocs/ ${user.uid}`)
+      onValue (userFileRef, (snapshot) => {
+      const displayData = snapshot.val()
+      console.log(displayData)
+    //   setPost ((prev) => [
+    //     ...prev,
+    //      { text: displayData.text,
+    //       docUrl: displayData.docUrl}
+      // ])
+    })
+    };
+    fetchPost()
+    console.log(post)
+  }, [])
 
   return (
     <>
@@ -63,7 +122,7 @@ const Dashboard = () => {
           onChange={handleTextChange}
         />
 
-        <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
+        <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }} onClick = {handleFileUpload}>
           Upload
         </Button>
       </Box>
