@@ -13,7 +13,7 @@ import {
   onValue,
   update,
   set,
-  onChildAdded
+  onChildAdded,
 } from "firebase/database";
 
 import {
@@ -26,7 +26,7 @@ import {
 const Dashboard = () => {
   const { user, setUser } = useUserContext();
   const [file, setFile] = useState({ file: "", text: "", ts: "" });
-  const [post, setPost] = useState ([])
+  const [post, setPost] = useState(user.file);
 
   const placeholderList = [
     "Vaccination records",
@@ -48,7 +48,6 @@ const Dashboard = () => {
       [e.target.name]: e.target.files[0],
     }));
   };
-  
 
   const handleTextChange = (e) => {
     setFile((prevState) => ({
@@ -59,11 +58,11 @@ const Dashboard = () => {
 
   const handleFileUpload = async (e) => {
     e.preventDefault();
-    const filePath = file.file
+    const filePath = file.file;
 
     if (filePath) {
       console.log("start of upload");
-      console.log(filePath)
+      console.log(filePath);
       // storing the file into firebase storage
       const storage = getStorage();
       // console.log(ts)
@@ -75,28 +74,33 @@ const Dashboard = () => {
       const fileDownloadUrl = await getDownloadURL(fileRef);
 
       // updating the download url and text info on realtime database
-      const userFileRef = refDatabase(database, `userDocs/ ${user.uid} / ${ts}`);
-      set (userFileRef, {docUrl: fileDownloadUrl, text: file.text})
+      const userFileRef = refDatabase(
+        database,
+        `userDocs/ ${user.uid} / ${ts}`
+      );
+      set(userFileRef, {
+        docUrl: fileDownloadUrl,
+        text: file.text,
+        ts: `${ts}`,
+      });
     }
   };
 
   useEffect(() => {
-    console.log("woohooaa")
-    const fetchPost = async () => {
-      const userFileRef = await refDatabase (database, `userDocs/ ${user.uid}`)
-      onValue (userFileRef, (snapshot) => {
-      const displayData = snapshot.val()
-      console.log(displayData)
-    //   setPost ((prev) => [
-    //     ...prev,
-    //      { text: displayData.text,
-    //       docUrl: displayData.docUrl}
-      // ])
-    })
-    };
-    fetchPost()
-    console.log(post)
-  }, [])
+    const userFileRef = refDatabase(database, `userDocs/ ${user.uid}`);
+    console.log(userFileRef);
+    onChildAdded(userFileRef, (file) => {
+      setPost((prev) => [
+        ...prev,
+        {
+          docUrl: database.val().docUrl,
+          text: database.val().text,
+          ts: database.val().ts,
+        },
+      ]);
+    });
+    console.log(post);
+  }, []);
 
   return (
     <>
@@ -122,10 +126,16 @@ const Dashboard = () => {
           onChange={handleTextChange}
         />
 
-        <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }} onClick = {handleFileUpload}>
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{ mt: 3, mb: 2 }}
+          onClick={handleFileUpload}
+        >
           Upload
         </Button>
       </Box>
+      {/* {post && post.map } */}
     </>
   );
 };

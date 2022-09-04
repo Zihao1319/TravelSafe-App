@@ -23,6 +23,7 @@ import {
   getDatabase,
   ref as refDatabase,
   onValue,
+  child,
 } from "firebase/database";
 import * as yup from "yup";
 
@@ -49,22 +50,43 @@ const Login = () => {
       const { email, password } = values;
       try {
         const user = await signInWithEmailAndPassword(auth, email, password);
+        const database = getDatabase();
 
         if (user) {
-          const database = getDatabase();
           const userRef = refDatabase(database, `userInfo/ ${user.user.uid}`);
           onValue(userRef, (snapshot) => {
-           const userData = snapshot.val();
-           setUser({
-             email: userData.email,
-             firstName: userData.firstName,
-             lastName: userData.lastName,
-             photoURL: userData.photoURL,
-             uid: user.user.uid,
-           });
+            console.log(snapshot);
+            const userData = snapshot.val();
+            console.log(userData);
 
-         });
-         console.log(user);
+            setUser((prev) => ({
+              ...prev,
+              email: userData.email,
+              firstName: userData.firstName,
+              lastName: userData.lastName,
+              photoURL: userData.photoURL,
+              uid: user.user.uid,
+            }));
+          });
+
+          // getting the user docs
+          const userFileRef = refDatabase(
+            database,
+            `userDocs/ ${user.user.uid} `
+          );
+          console.log(userFileRef);
+          onValue(userFileRef, (snapshot) => {
+            console.log(snapshot);
+            const userFile = snapshot.val();
+
+            console.log(Object.values(userFile));
+            setUser((prev) => ({
+              ...prev,
+              file: Object.values(userFile),
+            }));
+          });
+
+          console.log(user);
 
           // setUser({ userName: user.user.displayName, uid: user.user.uid });
           // localStorage.setItems("user", user.user.email);
