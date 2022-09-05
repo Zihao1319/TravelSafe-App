@@ -23,8 +23,11 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 
+import FileDisplay from "./FileDisplay";
+import { cp } from "fs";
+
 const Dashboard = () => {
-  const { user, setUser } = useUserContext();
+  const { user } = useUserContext();
   const [file, setFile] = useState({ file: "", text: "", ts: "" });
   const [post, setPost] = useState(user.file);
 
@@ -86,21 +89,31 @@ const Dashboard = () => {
     }
   };
 
-  useEffect(() => {
-    const userFileRef = refDatabase(database, `userDocs/ ${user.uid}`);
-    console.log(userFileRef);
-    onChildAdded(userFileRef, (file) => {
-      setPost((prev) => [
-        ...prev,
-        {
-          docUrl: database.val().docUrl,
-          text: database.val().text,
-          ts: database.val().ts,
-        },
-      ]);
-    });
-    console.log(post);
-  }, []);
+  // useEffect(() => {
+  //   const userFileRef = refDatabase(database, `userDocs/ ${user.uid} `);
+  //   onValue(userFileRef, (snapshot) => {
+  //     const userFile = snapshot.val();
+  //     const userInfo = Object.values(userFile);
+
+  //     if (userFile) {
+  //       setPost((prev) => [
+  //         ...prev,
+  //         {
+  //           docUrl: userInfo.docUrl,
+  //           text: userInfo.text,
+  //           ts: userInfo.ts,
+  //         },
+  //       ]);
+  //     } else {
+  //       setPost({
+  //         docUrl: userInfo.docUrl,
+  //         text: userInfo.text,
+  //         ts: userInfo.ts,
+  //       });
+  //     }
+  //   });
+  //   console.log(post);
+  // }, []);
 
   return (
     <>
@@ -135,7 +148,14 @@ const Dashboard = () => {
           Upload
         </Button>
       </Box>
-      {/* {post && post.map } */}
+      {post &&
+        post.map((data, i) => {
+          return (
+            <div key={i}>
+              <FileDisplay data={data} />
+            </div>
+          );
+        })}
     </>
   );
 };
