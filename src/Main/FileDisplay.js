@@ -25,26 +25,39 @@ import {
 } from "firebase/storage";
 
 const FileDisplay = (props) => {
-  const {user} = useUserContext()
   const imgURL = props.data.docUrl;
-  //   console.log(imgURL);
   const description = props.data.text;
   const timeStamp = props.data.ts;
-  const database = getDatabase();
-  
-  const deleteFile = () => {
-    console.log("delete button pressed")
-    console.log(imgURL, description)
-    const storage = getStorage();
-    const fileRef = refStorage(storage, `userDocsFolder/${user.uid}/${timeStamp}`);
-    // remove (fileRef)
-    
-    const userFileRef = refDatabase(
-      database,
-      `userDocs/ ${user.uid} / ${timeStamp}`
-    );
-    remove (userFileRef)
-  }
+  // const { user } = useUserContext();
+  // const database = getDatabase();
+
+  // const delete = (event) => {
+  //   props.delete;
+  // console.log("delete button pressed")
+  // console.log(imgURL, description)
+  // const storage = getStorage();
+  // const fileRef = refStorage(storage, `userDocsFolder/${user.uid}/${timeStamp}`);
+  // // remove (fileRef)
+
+  // const userFileRef = refDatabase(
+  //   database,
+  //   `userDocs/ ${user.uid} / ${timeStamp}`
+  // );
+  // remove (userFileRef)
+
+  // const handleDeleteFile = () => {
+  //   console.log("delete button pressed");
+  //   // console.log(imgURL, description);
+  //   // const storage = getStorage();
+  //   // const fileRef = refStorage(storage, `userDocsFolder/${user.uid}/${ts}`);
+  //   // remove (fileRef)
+  //   const userFileRef = refDatabase(
+  //     database,
+  //     `userDocsFolder/${user.uid}/${timeStamp}`
+  //   );
+  //   console.log(userFileRef);
+  //   remove(userFileRef);
+  // };
 
   return (
     <Card sx={{ maxWidth: 345 }}>
@@ -64,7 +77,10 @@ const FileDisplay = (props) => {
         <Typography variant="body1" color="text.secondary"></Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick = {deleteFile}>Delete</Button>
+        <Button size="small" onClick={props.delete}>
+          {/* <Button size="small" onClick={handleDeleteFile}> */}
+          Delete
+        </Button>
       </CardActions>
     </Card>
   );

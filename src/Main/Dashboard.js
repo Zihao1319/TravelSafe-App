@@ -14,6 +14,7 @@ import {
   update,
   set,
   onChildAdded,
+  remove,
 } from "firebase/database";
 
 import {
@@ -29,9 +30,10 @@ import ErrorDisplay from "./ErrorDisplay";
 const Dashboard = () => {
   const { user } = useUserContext();
   const [file, setFile] = useState({ file: "", text: "", ts: "" });
+  // const [post, setPost] = useState([]);
   const [post, setPost] = useState([]);
-  // const [post, setPost] = useState(user.file);
-  const [isNewPost, setNewPost] = useState (false)
+  const [isUpdated, setUpdate] = useState("");
+  const [isDeleted, setDelete] = useState(null);
 
   const placeholderList = [
     "Vaccination records",
@@ -83,67 +85,112 @@ const Dashboard = () => {
         `userDocs/ ${user.uid} / ${ts}`
       );
 
-      const newUserFileInfo = {docUrl: fileDownloadUrl, text: file.text,
-        ts: `${ts}`}
+      const newUserFileInfo = {
+        docUrl: fileDownloadUrl,
+        text: file.text,
+        ts: `${ts}`,
+      };
 
-      set (userFileRef, newUserFileInfo);
+      set(userFileRef, newUserFileInfo);
+      // setFile (newUserFileInfo)
       // setPost((prev) => [
       //   ...prev,
       //   newUserFileInfo
       // ])};
-      setNewPost(true)
+      setUpdate(newUserFileInfo);
     }
-    setFile ("")
+    setFile("");
   };
 
   const fetchPost = () => {
     const userFileRef = refDatabase(database, `userDocs/ ${user.uid} `);
     onChildAdded(userFileRef, (data) => {
-        const userFile = data.val();
-        const userInfo = Object.values(userFile);
-        console.log(userInfo)
+      const userFile = data.val();
+      const userInfo = Object.values(userFile);
+      console.log(userInfo);
 
-        // if there is no existing post on file
-        if (!post) {
-          console.log("first post")
-          setPost ([{
-            docUrl: userInfo.docUrl,
-            text: userInfo.text,
-            ts: userInfo.ts,
-          }])
+      // if there is no existing post on file
+      // if (!post) {
+      //   console.log("first post");
+      //   setPost([
+      //     {
+      //       docUrl: userInfo.docUrl,
+      //       text: userInfo.text,
+      //       ts: userInfo.ts,
+      //     },
+      //   ]);
 
-        // if there is already existing post on file  
-        } else {
-          console.log("append to last post")
-          setPost((prev) => [
-            ...prev,
-            {
-              docUrl: userInfo.docUrl,
-              text: userInfo.text,
-              ts: userInfo.ts,
-            },
-          ])};
+      //   // if there is already existing post on file
+      // } else {
+      console.log("append to last post");
+      setPost((prev) => [
+        ...prev,
+        {
+          docUrl: userInfo.docUrl,
+          text: userInfo.text,
+          ts: userInfo.ts,
+        },
+      ]);
     });
-    setNewPost(false)
-  }
+    setUpdate("");
+  };
+
+  const handleDeleteFile = (data) => {
+    console.log("delete button pressed");
+    console.log(data);
+    const timeStamp = data.ts;
+    // console.log(imgURL, description);
+    // const storage = getStorage();
+    // const fileRef = refStorage(storage, `userDocsFolder/${user.uid}/${ts}`);
+    // remove (fileRef)
+    console.log(post);
+    const userFileRef = refDatabase(
+      database,
+      `userDocs/ ${user.uid} / ${timeStamp}`
+    );
+    console.log(userFileRef);
+    remove(userFileRef);
+    setDelete(true);
+  };
+
+  console.log(isDeleted);
 
   useEffect(() => {
-  if (!isNewPost) {
-    console.log("from database")
-    console.log(post)
-    return setPost (user.file)
-  } 
+    if (isDeleted === true) {
+      console.log("isDeleted");
+      return fetchPost();
+    }
+  }, [setDelete]);
 
-  else {
-    console.log("just uploaded")
-    fetchPost()
-    console.log(post)
-  }
+  useEffect(() => {
+    // if there is no existing post yet from database
+    if (!post) {
+      console.log("!post");
+      return setPost([isUpdated]);
+    }
 
-},[isNewPost]);
+    //if a new file has been uploaded
+    if (isUpdated) {
+      console.log("isUpdated");
+      return fetchPost();
+    }
 
-console.log(isNewPost)
+    //when the user first login and it has existing data
+    console.log("extracted from database");
+    return setPost(user.file);
 
+    // if (!isNewPost) {
+    //   console.log("from database");
+    //   console.log(post);
+    //   return setPost(user.file);
+    // } else {
+    //   console.log("just uploaded");
+    //   fetchPost();
+    //   console.log(post);
+    // }
+  }, [isUpdated]);
+
+  // console.log(post);
 
   return (
     <>
@@ -178,14 +225,17 @@ console.log(isNewPost)
           Upload
         </Button>
       </Box>
-      {post ? 
+      {post ? (
         post.map((data, i) => {
           return (
             <div key={i}>
-              <FileDisplay data={data} />
+              <FileDisplay data={data} delete={() => handleDeleteFile(data)} />
             </div>
           );
-        }) : <ErrorDisplay />}
+        })
+      ) : (
+        <ErrorDisplay />
+      )}
     </>
   );
 };
