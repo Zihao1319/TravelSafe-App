@@ -24,12 +24,14 @@ import {
 } from "firebase/storage";
 
 import FileDisplay from "./FileDisplay";
-import { cp } from "fs";
+import ErrorDisplay from "./ErrorDisplay";
 
 const Dashboard = () => {
   const { user } = useUserContext();
   const [file, setFile] = useState({ file: "", text: "", ts: "" });
-  const [post, setPost] = useState(user.file);
+  const [post, setPost] = useState([]);
+  // const [post, setPost] = useState(user.file);
+  const [isNewPost, setNewPost] = useState (false)
 
   const placeholderList = [
     "Vaccination records",
@@ -68,7 +70,6 @@ const Dashboard = () => {
       console.log(filePath);
       // storing the file into firebase storage
       const storage = getStorage();
-      // console.log(ts)
 
       // need time stamp so as to get individual files
       const fileRef = refStorage(storage, `userDocsFolder/${user.uid}/${ts}`);
@@ -81,39 +82,68 @@ const Dashboard = () => {
         database,
         `userDocs/ ${user.uid} / ${ts}`
       );
-      set(userFileRef, {
-        docUrl: fileDownloadUrl,
-        text: file.text,
-        ts: `${ts}`,
-      });
+
+      const newUserFileInfo = {docUrl: fileDownloadUrl, text: file.text,
+        ts: `${ts}`}
+
+      set (userFileRef, newUserFileInfo);
+      // setPost((prev) => [
+      //   ...prev,
+      //   newUserFileInfo
+      // ])};
+      setNewPost(true)
     }
+    setFile ("")
   };
 
-  // useEffect(() => {
-  //   const userFileRef = refDatabase(database, `userDocs/ ${user.uid} `);
-  //   onValue(userFileRef, (snapshot) => {
-  //     const userFile = snapshot.val();
-  //     const userInfo = Object.values(userFile);
+  const fetchPost = () => {
+    const userFileRef = refDatabase(database, `userDocs/ ${user.uid} `);
+    onChildAdded(userFileRef, (data) => {
+        const userFile = data.val();
+        const userInfo = Object.values(userFile);
+        console.log(userInfo)
 
-  //     if (userFile) {
-  //       setPost((prev) => [
-  //         ...prev,
-  //         {
-  //           docUrl: userInfo.docUrl,
-  //           text: userInfo.text,
-  //           ts: userInfo.ts,
-  //         },
-  //       ]);
-  //     } else {
-  //       setPost({
-  //         docUrl: userInfo.docUrl,
-  //         text: userInfo.text,
-  //         ts: userInfo.ts,
-  //       });
-  //     }
-  //   });
-  //   console.log(post);
-  // }, []);
+        // if there is no existing post on file
+        if (!post) {
+          console.log("first post")
+          setPost ([{
+            docUrl: userInfo.docUrl,
+            text: userInfo.text,
+            ts: userInfo.ts,
+          }])
+
+        // if there is already existing post on file  
+        } else {
+          console.log("append to last post")
+          setPost((prev) => [
+            ...prev,
+            {
+              docUrl: userInfo.docUrl,
+              text: userInfo.text,
+              ts: userInfo.ts,
+            },
+          ])};
+    });
+    setNewPost(false)
+  }
+
+  useEffect(() => {
+  if (!isNewPost) {
+    console.log("from database")
+    console.log(post)
+    return setPost (user.file)
+  } 
+
+  else {
+    console.log("just uploaded")
+    fetchPost()
+    console.log(post)
+  }
+
+},[isNewPost]);
+
+console.log(isNewPost)
+
 
   return (
     <>
@@ -148,14 +178,14 @@ const Dashboard = () => {
           Upload
         </Button>
       </Box>
-      {post &&
+      {post ? 
         post.map((data, i) => {
           return (
             <div key={i}>
               <FileDisplay data={data} />
             </div>
           );
-        })}
+        }) : <ErrorDisplay />}
     </>
   );
 };

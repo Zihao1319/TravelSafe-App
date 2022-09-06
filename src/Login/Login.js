@@ -76,7 +76,6 @@ const Login = () => {
           );
           console.log(userFileRef);
           onValue(userFileRef, (snapshot) => {
-            console.log(snapshot);
             const userFile = snapshot.val();
 
             console.log(Object.values(userFile));
