@@ -52,6 +52,8 @@ const Login = () => {
         const user = await signInWithEmailAndPassword(auth, email, password);
         const database = getDatabase();
 
+
+        //getting all the data from refDatabase and load them as state
         if (user) {
           const userRef = refDatabase(database, `userInfo/ ${user.user.uid}`);
           onValue(userRef, (snapshot) => {
@@ -76,19 +78,23 @@ const Login = () => {
           );
           console.log(userFileRef);
           onValue(userFileRef, (snapshot) => {
-            const userFile = snapshot.val();
-
-            console.log(Object.values(userFile));
-            setUser((prev) => ({
+            if (snapshot.exists()) {
+              const userFile = snapshot.val();
+              console.log(Object.values(userFile));
+              setUser((prev) => ({
               ...prev,
               file: Object.values(userFile),
-            }));
+              }));
+
+            } else {
+              console.log("doesnt exist")
+              setUser((prev) => ({
+                ...prev,
+                file: "",
+                }));
+            }
           });
-
           console.log(user);
-
-          // setUser({ userName: user.user.displayName, uid: user.user.uid });
-          // localStorage.setItems("user", user.user.email);
           navigate("/");
           console.log("Login successful");
         }

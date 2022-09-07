@@ -6,65 +6,37 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import {
-  get,
-  getDatabase,
-  ref as refDatabase,
-  onValue,
-  update,
-  set,
-  onChildAdded,
-  remove,
-} from "firebase/database";
-
-import {
-  getStorage,
-  ref as refStorage,
-  uploadBytes,
-  getDownloadURL,
-} from "firebase/storage";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 const FileDisplay = (props) => {
-  const imgURL = props.data.docUrl;
+  const url = props.data.docUrl;
   const description = props.data.text;
   const timeStamp = props.data.ts;
-  // const { user } = useUserContext();
-  // const database = getDatabase();
 
-  // const delete = (event) => {
-  //   props.delete;
-  // console.log("delete button pressed")
-  // console.log(imgURL, description)
-  // const storage = getStorage();
-  // const fileRef = refStorage(storage, `userDocsFolder/${user.uid}/${timeStamp}`);
-  // // remove (fileRef)
+  // for AlertDialog()
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
-  // const userFileRef = refDatabase(
-  //   database,
-  //   `userDocs/ ${user.uid} / ${timeStamp}`
-  // );
-  // remove (userFileRef)
+  const handleClickClose = () => {
+    setOpen(false);
+  };
 
-  // const handleDeleteFile = () => {
-  //   console.log("delete button pressed");
-  //   // console.log(imgURL, description);
-  //   // const storage = getStorage();
-  //   // const fileRef = refStorage(storage, `userDocsFolder/${user.uid}/${ts}`);
-  //   // remove (fileRef)
-  //   const userFileRef = refDatabase(
-  //     database,
-  //     `userDocsFolder/${user.uid}/${timeStamp}`
-  //   );
-  //   console.log(userFileRef);
-  //   remove(userFileRef);
-  // };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
         component="img"
         height="140"
-        image={imgURL}
+        image={url}
         alt="green iguana"
       />
       <CardContent>
@@ -74,13 +46,37 @@ const FileDisplay = (props) => {
         <Typography variant="body2" color="text.secondary">
           {timeStamp}
         </Typography>
-        <Typography variant="body1" color="text.secondary"></Typography>
+        <a href = {url} target = "_blank" rel = "noopener">Download here</a>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={props.delete}>
-          {/* <Button size="small" onClick={handleDeleteFile}> */}
+        <Button variant="filled" onClick={handleClickOpen} sx={{color: 'red'}}>
           Delete
         </Button>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        > 
+        <DialogTitle id="alert-dialog-title">
+          {"Are you sure you want to delete?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Once it is deleted, you will not be able to retrieve it back
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => {props.delete(); handleClickClose()}} sx={{color: 'red'}} autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+        </Dialog>
+
+{/* 
+        <Button size="small" onClick={props.delete} sx={{color: 'red'}}>
+          Delete
+        </Button> */}
       </CardActions>
     </Card>
   );
