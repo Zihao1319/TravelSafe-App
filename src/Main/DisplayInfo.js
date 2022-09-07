@@ -21,6 +21,18 @@ const DisplayInfo = (data) => {
     vaccineObj,
     "supportedVaccineProducts"
   );
+
+  const backgrdColor = [
+    "#FFFDE7",
+    "#FFF9C4",
+    "#FFF59D",
+    "#FFF176",
+    "#FFEE58",
+    "#FFEB3B",
+    "#FDD835",
+    "#FBC02D",
+    "#F9A825",
+  ];
   // console.log(vaccineList);
 
   // const vaccineList2 = extractVaccineInfo2(
@@ -146,7 +158,11 @@ const DisplayInfo = (data) => {
           // console.log(Object.values(info))
           return (
             <div key={i}>
-              <AccordionDisplay title={header} data={subTableData} />
+              <AccordionDisplay
+                title={header}
+                data={subTableData}
+                color={backgrdColor[i]}
+              />
             </div>
           );
         })}

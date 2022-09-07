@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
-import Button from "@mui/material/Button";
 import { useFormik } from "formik";
 import axios from "axios";
 import countryCodes from "./CountryCode";
 import SelectCountry from "./SelectCountry";
 import DisplayInfo from "./DisplayInfo";
-import SingaporeData from "../testdata";
-import ErrorDisplay from "./ErrorDisplay";
-import ResponsiveAppBar from "../NavBar";
-import { UserContextProvider, useUserContext } from "../userContext";
+import { ErrorDisplay } from "./ErrorDisplay";
+import { useUserContext } from "../userContext";
 import { push, getDatabase, ref as refDatabase, set } from "firebase/database";
 import { randomSelect } from "../utils/utils";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
 
 const options = countryCodes;
 
@@ -106,34 +110,46 @@ const TravelForm = () => {
   // console.log(info, isNotValid);
   // console.log(info, typeof info, isEmpty);
 
-  const saveData = () => {
-    const newData = {
-      country: info.area.name,
-      info: JSON.stringify(info),
-      timeStamp: Date.now(),
-    };
+  // const saveData = () => {
+  //   const newData = {
+  //     country: info.area.name,
+  //     info: JSON.stringify(info),
+  //     timeStamp: Date.now(),
+  //   };
 
-    console.log(newData);
+  //   console.log(newData);
 
-    const database = getDatabase();
-    const DATA_STORAGE = `dataStorage/${user.uid}`;
+  //   const database = getDatabase();
+  //   const DATA_STORAGE = `dataStorage/${user.uid}`;
 
-    try {
-      const dataStorageRef = refDatabase(database, DATA_STORAGE);
-      const newDataRef = push(dataStorageRef);
-      set(newDataRef, newData);
-      console.log("data saved successfully");
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  //   try {
+  //     const dataStorageRef = refDatabase(database, DATA_STORAGE);
+  //     const newDataRef = push(dataStorageRef);
+  //     set(newDataRef, newData);
+  //     console.log("data saved successfully");
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   return (
     <>
-      <form onSubmit={formik.handleSubmit}>
-        <label htmlFor="country">
+      <Stack
+        spacing={2}
+        sx={{ display: "flex", flexDirection: "column", m: 5, mx: 5 }}
+      >
+        <Box
+          component="form"
+          onSubmit={formik.handleSubmit}
+          alignItems="center"
+        >
+          <Typography component="h3" variant="h6">
+            Hello {userName ? userName : ""}, where do you want to go next?
+          </Typography>
+        </Box>
+        {/* <label htmlFor="country">
           Hello {userName ? userName : ""}, where would you love to go?
-        </label>
+        </label> */}
 
         <SelectCountry
           placeholder={randomCountry}
@@ -145,16 +161,12 @@ const TravelForm = () => {
         {formik.errors.country ? (
           <div className="error">{formik.errors.country}</div>
         ) : null}
-        <button type="submit">Submit</button>
-      </form>
-      {!isEmpty ? <DisplayInfo data={info} /> : <ErrorDisplay />}
-      {!isEmpty ? (
-        <Button variant="contained" onClick={saveData}>
-          Save Data
+        <Button type="submit" variant="contained" onClick={formik.handleSubmit}>
+          Submit
         </Button>
-      ) : (
-        ""
-      )}
+
+        {!isEmpty ? <DisplayInfo data={info} /> : <ErrorDisplay />}
+      </Stack>
     </>
   );
 };

@@ -27,6 +27,8 @@ const newKeys = {
 const AccordionDisplay = (props) => {
   const data = renameKey(props.data, newKeys);
   const title = props.title;
+  const backgrdColor = props.color;
+  console.log(backgrdColor);
 
   const [expanded, setExpanded] = React.useState(false);
 
@@ -43,8 +45,13 @@ const AccordionDisplay = (props) => {
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1"
           id="panel1"
+          sx={{
+            bgcolor: `${backgrdColor}`,
+          }}
         >
-          <Typography sx={{ width: "33%", flexShrink: 0 }}>{title}</Typography>
+          <Typography variant="overline" sx={{ width: "100%", flexShrink: 0 }}>
+            {title}
+          </Typography>
           <Typography sx={{ color: "text.secondary" }}></Typography>
         </AccordionSummary>
         <AccordionDetails>

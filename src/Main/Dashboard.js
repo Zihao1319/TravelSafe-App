@@ -5,6 +5,9 @@ import Typography from "@mui/material/Typography";
 import Input from "@mui/material/Input";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import ImageList from "@mui/material/ImageList";
+import Grid from "@mui/material/Grid";
+
 import { randomSelect } from "../utils/utils";
 import {
   get,
@@ -26,17 +29,16 @@ import {
 } from "firebase/storage";
 
 import FileDisplay from "./FileDisplay";
-import ErrorDisplay from "./ErrorDisplay";
+import { NoFileDisplay } from "./ErrorDisplay";
 
 const Dashboard = () => {
   const { user } = useUserContext();
   const [file, setFile] = useState({ file: "", text: "", ts: "" });
-  // const [post, setPost] = useState([]);
   const [post, setPost] = useState([user.file]);
   const [isUpdated, setUpdate] = useState();
   const [isDeleted, setDelete] = useState(false);
 
-  console.log(user.file)
+  console.log(user.file);
 
   const placeholderList = [
     "Vaccination records",
@@ -96,13 +98,13 @@ const Dashboard = () => {
       set(userFileRef, newUserFileInfo);
       setUpdate(newUserFileInfo);
     }
-    setFile({ file: "", text: "", ts: "" })
+    setFile({ file: "", text: "", ts: "" });
   };
 
   // const fetchPost = () => {
   //   const userFileRef = refDatabase(database, `userDocs/ ${user.uid} `);
   //   onChildAdded(userFileRef, (data) => {
-      
+
   //     if (data.exists()) {
 
   //       console.log("folder exists")
@@ -129,7 +131,6 @@ const Dashboard = () => {
   //   });
   // };
 
-
   const handleDeleteFile = (data) => {
     console.log("delete button pressed");
     const timeStamp = data.ts;
@@ -141,30 +142,27 @@ const Dashboard = () => {
     setDelete(true);
   };
 
-
   useEffect(() => {
-
     if (isUpdated) {
       console.log("isUpdated");
-      setUpdate ("")
-      return setPost(user.file)
+      setUpdate("");
+      return setPost(user.file);
     }
 
     if (isDeleted) {
-      console.log("isDeleted")
-      setDelete (false)
-      return setPost(user.file)
+      console.log("isDeleted");
+      setDelete(false);
+      return setPost(user.file);
     }
 
     //when the user first login and it has existing data
     console.log("extracted from database");
     return setPost(user.file);
-
   }, [isUpdated, isDeleted]);
 
-  console.log(post)
-  console.log(file)
-  console.log("delete?" + isDeleted)
+  console.log(post);
+  console.log(file);
+  console.log("delete?" + isDeleted);
 
   return (
     <>
@@ -199,17 +197,28 @@ const Dashboard = () => {
           Upload
         </Button>
       </Box>
-      {post ? (
-        post.map((data, i) => {
-          return (
-            <div key={i}>
-              <FileDisplay data={data} delete={() => handleDeleteFile(data)} />
-            </div>
-          );
-        })
-      ) : (
-        <ErrorDisplay />
-      )}
+      <Box container alignItems="center" justifyContent="center">
+        <ImageList
+          sx={{ width: "50%", height: "50%" }}
+          // cols={3}
+          // rowHeight={164}
+        >
+          {post ? (
+            post.map((data, i) => {
+              return (
+                <div key={i}>
+                  <FileDisplay
+                    data={data}
+                    delete={() => handleDeleteFile(data)}
+                  />
+                </div>
+              );
+            })
+          ) : (
+            <NoFileDisplay />
+          )}
+        </ImageList>
+      </Box>
     </>
   );
 };

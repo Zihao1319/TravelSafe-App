@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useUserContext } from "../userContext";
 import {
   get,
@@ -25,29 +25,16 @@ import Box from "@mui/material/Box";
 
 const Profile = () => {
   const { user, setUser } = useUserContext();
-  const [imgFile, setImgFile] = useState();
+  const [img, setImg] = useState(user.photoURL);
+  const [isUpdated, setUpdate] = useState();
+  const [changeAlert, setChangeAlert] = useState(false);
 
   console.log(user);
-
-  //   const auth = getAuth();
-  //   const userInfo = auth.currentUser;
-
-  //   console.log(userInfo);
-  //   console.log(user);
-
-  //   const photo = user.photoURL;
-  //   const firstName = user.firstName;
-  //   const lastName = user.lastName;
-  //   const email = user.email;
 
   const handleImgChange = (e) => {
     // e.preventDefault();
     const filePath = e.target.files[0];
-    console.log(filePath);
-    // const isImg = e.target.files[0]["type"].split("/")[0] === "image";
-    // console.log(isImg)
-    setImgFile(filePath);
-    console.log(imgFile);
+    setUpdate(filePath);
   };
 
   const handleImgUpload = async (e) => {
@@ -55,26 +42,37 @@ const Profile = () => {
 
     const database = getDatabase();
 
-    if (imgFile) {
+    if (isUpdated) {
       console.log("start of upload");
+
       // storing the profile pic into firebase storage
       const storage = getStorage();
       const fileRef = refStorage(storage, `userPictureFolder/${user.uid}`);
-      await uploadBytes(fileRef, imgFile);
+      await uploadBytes(fileRef, isUpdated);
       const imgDownloadUrl = await getDownloadURL(fileRef);
       console.log(imgDownloadUrl);
 
       // updating new profile pic on realtime database
       const userRef = refDatabase(database, `userInfo/ ${user.uid}`);
+
       update(userRef, { photoURL: imgDownloadUrl });
+
       setUser((prev) => ({
         ...prev,
         photoURL: imgDownloadUrl,
       }));
-
-      setImgFile("");
     }
+    setUpdate("");
+    setChangeAlert(true);
   };
+
+  useEffect(() => {
+    if (changeAlert) {
+      console.log("huat");
+      return setImg(user.photoURL);
+    }
+    setChangeAlert(false);
+  }, [changeAlert, isUpdated]);
 
   return (
     <Box
@@ -84,12 +82,12 @@ const Profile = () => {
       sx={{ display: "flex", flexDirection: "column", m: 5, mx: "auto" }}
     >
       <Typography variant="h4" sx={{ p: 2 }}>
-        Hello! {user.firstName} {user.lastName}
+        Hello! {user.firstName}, {user.lastName}
       </Typography>
       <Avatar
         alt="Say cheese!"
         // src={user.photo ? user.photo : "/broken-image.jpg"}
-        src={user.photoURL ? user.photoURL : "/broken-image.jpg"}
+        src={img ? img : "/broken-image.jpg"}
         sx={{ width: 100, height: 100 }}
       />
       <Button
@@ -106,7 +104,7 @@ const Profile = () => {
         sx={{ mx: "auto" }}
         component="label"
         onClick={handleImgUpload}
-        disabled={!imgFile}
+        disabled={!isUpdated}
       >
         Upload
       </Button>
@@ -118,9 +116,9 @@ const Profile = () => {
           {user.email}
         </Typography>
       </CardContent>
-      <CardActions>
+      {/* <CardActions>
         <Button size="small">Search history</Button>
-      </CardActions>
+      </CardActions> */}
     </Box>
 
     // <Card sx={{ maxWidth: 345 }}>
