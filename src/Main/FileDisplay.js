@@ -10,6 +10,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import Box from "@mui/material/Box";
 
 const FileDisplay = (props) => {
   const url = props.data.docUrl;
@@ -31,7 +32,8 @@ const FileDisplay = (props) => {
   };
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ minWidth: 345, bgcolor: "#F5FCFF", display:"flex" }}>
+      <Box sx={{ display:"flex", flexDirection: "column" }}>
       {/* <CardMedia
         component="img"
         height="140"
@@ -42,7 +44,7 @@ const FileDisplay = (props) => {
         <Typography gutterBottom variant="h5" component="div">
           {description}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="overline" color="text.secondary">
           {timeStamp}
         </Typography>
         <a href={url} target="_blank" rel="noopener">
@@ -85,6 +87,7 @@ const FileDisplay = (props) => {
           </DialogActions>
         </Dialog>
       </CardActions>
+      </Box>
     </Card>
   );
 };

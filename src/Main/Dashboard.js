@@ -169,12 +169,12 @@ const Dashboard = () => {
       <Box
         justifyContent="center"
         alignItems="center"
-        display="flex"
+        display="column"
         component="form"
-        sx={{ display: "flex", flexDirection: "column", m: 5, mx: "auto" }}
+        sx={{ display: "flex", flexDirection: "column", m: 4, mx: "auto" }}
       >
         <Typography variant="h5" sx={{ p: 2 }}>
-          All your travel needs in one place
+          Store your essential docs here
         </Typography>
         <Input type="file" name="file" onChange={handleFileChange} />
         <TextField
@@ -196,13 +196,9 @@ const Dashboard = () => {
         >
           Upload
         </Button>
-      </Box>
-      <Box container alignItems="center" justifyContent="center">
-        <ImageList
-          sx={{ width: "50%", height: "50%" }}
-          // cols={3}
-          // rowHeight={164}
-        >
+      
+      {/* <Box container alignItems="center" justifyContent="center"> */}
+        
           {post ? (
             post.map((data, i) => {
               return (
@@ -217,7 +213,6 @@ const Dashboard = () => {
           ) : (
             <NoFileDisplay />
           )}
-        </ImageList>
       </Box>
     </>
   );
