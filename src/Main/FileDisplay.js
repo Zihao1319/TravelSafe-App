@@ -17,6 +17,8 @@ const FileDisplay = (props) => {
   const description = props.data.text;
   const timeStamp = props.data.ts;
 
+  console.log(props);
+
   // for AlertDialog()
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
@@ -32,61 +34,63 @@ const FileDisplay = (props) => {
   };
 
   return (
-    <Card sx={{ minWidth: 345, bgcolor: "#F5FCFF", display:"flex" }}>
-      <Box sx={{ display:"flex", flexDirection: "column" }}>
-      {/* <CardMedia
+    <Card sx={{ minWidth: 345, bgcolor: "#F5FCFF", display: "flex", m: 1 }}>
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
+        {/* <CardMedia
         component="img"
         height="140"
         image={url}
         alt="green iguana"
       /> */}
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          {description}
-        </Typography>
-        <Typography variant="overline" color="text.secondary">
-          {timeStamp}
-        </Typography>
-        <a href={url} target="_blank" rel="noopener">
-          Download here
-        </a>
-      </CardContent>
-      <CardActions>
-        <Button
-          variant="filled"
-          onClick={handleClickOpen}
-          sx={{ color: "red" }}
-        >
-          Delete
-        </Button>
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">
-            {"Are you sure you want to delete?"}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Once it is deleted, you will not be able to retrieve it back
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={() => {
-                props.delete();
-                handleClickClose();
-              }}
-              sx={{ color: "red" }}
-              autoFocus
-            >
-              Delete
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </CardActions>
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="div">
+            {description}
+          </Typography>
+          <Typography variant="overline" color="text.secondary">
+            {timeStamp}
+          </Typography>
+          <Typography>
+            <a href={url} target="_blank" rel="noopener">
+              Download here
+            </a>
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <Button
+            variant="filled"
+            onClick={handleClickOpen}
+            sx={{ color: "red" }}
+          >
+            Delete
+          </Button>
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              {"Are you sure you want to delete?"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Once it is deleted, you will not be able to retrieve it back
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={() => {
+                  props.delete();
+                  handleClickClose();
+                }}
+                sx={{ color: "red" }}
+                autoFocus
+              >
+                Delete
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </CardActions>
       </Box>
     </Card>
   );

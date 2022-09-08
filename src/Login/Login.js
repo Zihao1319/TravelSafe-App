@@ -52,7 +52,6 @@ const Login = () => {
         const user = await signInWithEmailAndPassword(auth, email, password);
         const database = getDatabase();
 
-
         //getting all the data from refDatabase and load them as state
         if (user) {
           const userRef = refDatabase(database, `userInfo/ ${user.user.uid}`);
@@ -64,6 +63,7 @@ const Login = () => {
             setUser((prev) => ({
               ...prev,
               email: userData.email,
+              file: userData.file,
               firstName: userData.firstName,
               lastName: userData.lastName,
               photoURL: userData.photoURL,
@@ -82,16 +82,15 @@ const Login = () => {
               const userFile = snapshot.val();
               console.log(Object.values(userFile));
               setUser((prev) => ({
-              ...prev,
-              file: Object.values(userFile),
+                ...prev,
+                file: Object.values(userFile),
               }));
-
             } else {
-              console.log("doesnt exist")
+              console.log("doesnt exist");
               setUser((prev) => ({
                 ...prev,
                 file: "",
-                }));
+              }));
             }
           });
           console.log(user);
@@ -231,9 +230,9 @@ const Login = () => {
                 </Button>
                 <Grid container>
                   <Grid item xs>
-                    <Link href="#" variant="body2">
+                    {/* <Link href="#" variant="body2">
                       Forgot password?
-                    </Link>
+                    </Link> */}
                   </Grid>
                   <Grid item>
                     <Link href="./SignUp" variant="body2">

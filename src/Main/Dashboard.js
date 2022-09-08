@@ -30,15 +30,18 @@ import {
 
 import FileDisplay from "./FileDisplay";
 import { NoFileDisplay } from "./ErrorDisplay";
+import { PointOfSaleTwoTone } from "@mui/icons-material";
 
 const Dashboard = () => {
-  const { user } = useUserContext();
+  const { user, setUser } = useUserContext();
   const [file, setFile] = useState({ file: "", text: "", ts: "" });
-  const [post, setPost] = useState([user.file]);
+  const [post, setPost] = useState([]);
   const [isUpdated, setUpdate] = useState();
   const [isDeleted, setDelete] = useState(false);
+  const [alert, setAlert] = useState(false);
 
-  console.log(user.file);
+  console.log(post);
+  console.log(user);
 
   const placeholderList = [
     "Vaccination records",
@@ -96,40 +99,19 @@ const Dashboard = () => {
       };
 
       set(userFileRef, newUserFileInfo);
-      setUpdate(newUserFileInfo);
+      // setUpdate(newUserFileInfo);
+      setAlert(true);
+
+      // if (!user.file) {
+      //   console.log("just set");
+      //   setUser((prev) => ({
+      //     ...prev,
+      //     file: [newUserFileInfo],
+      //   }));
+      // }
     }
     setFile({ file: "", text: "", ts: "" });
   };
-
-  // const fetchPost = () => {
-  //   const userFileRef = refDatabase(database, `userDocs/ ${user.uid} `);
-  //   onChildAdded(userFileRef, (data) => {
-
-  //     if (data.exists()) {
-
-  //       console.log("folder exists")
-  //       const userFile = data.val();
-  //       const userInfo = Object.values(userFile);
-  //       console.log(userInfo);
-
-  //       if (isUpdated) {
-  //         console.log("append to last post");
-  //         setPost((prev) => [
-  //           ...prev,
-  //           {
-  //             docUrl: userInfo.docUrl,
-  //             text: userInfo.text,
-  //             ts: userInfo.ts,
-  //           },
-  //         ]);
-  //         setUpdate("");
-  //       }
-  //     } else {
-  //       console.log("data is empty")
-  //       return setPost("")
-  //     }
-  //   });
-  // };
 
   const handleDeleteFile = (data) => {
     console.log("delete button pressed");
@@ -140,29 +122,69 @@ const Dashboard = () => {
     );
     remove(userFileRef);
     setDelete(true);
+    // setAlert(true);
   };
 
   useEffect(() => {
-    if (isUpdated) {
-      console.log("isUpdated");
-      setUpdate("");
-      return setPost(user.file);
-    }
+    if (alert) {
+      console.log("alert");
+      const userFileRef = refDatabase(database, `userDocs/ ${user.uid} `);
+      console.log(userFileRef);
 
+      onValue(userFileRef, (snapshot) => {
+        if (snapshot.exists()) {
+          console.log("exists");
+          const userFile = snapshot.val();
+          // console.log(Object.values(userFile));
+          const userFileObj = Object.values(userFile);
+          // console.log(userFileObj);
+          setUser((prev) => ({
+            ...prev,
+            file: userFileObj,
+          }));
+          setPost(userFileObj);
+          // console.log(post);
+          setAlert(false);
+          return;
+        }
+        console.log("doesnt exist");
+        setUser((prev) => ({
+          ...prev,
+          file: "",
+        }));
+      });
+    }
     if (isDeleted) {
       console.log("isDeleted");
       setDelete(false);
+
+      return setPost(user.file);
+    } else {
       return setPost(user.file);
     }
+  }, [alert, isDeleted]);
 
-    //when the user first login and it has existing data
-    console.log("extracted from database");
-    return setPost(user.file);
-  }, [isUpdated, isDeleted]);
+  // useEffect(() => {
+  //   if (isUpdated) {
+  //     console.log("isUpdated");
+  //     setUpdate("");
+  //     return setPost(user.file);
+  //   }
+
+  //   if (isDeleted) {
+  //     console.log("isDeleted");
+  //     setDelete(false);
+  //     return setPost(user.file);
+  //   }
+
+  //   //when the user first login and it has existing data
+  //   console.log("extracted from database");
+  //   return setPost(user.file);
+  // }, [isUpdated, isDeleted]);
 
   console.log(post);
-  console.log(file);
-  console.log("delete?" + isDeleted);
+  // console.log(file);
+  // console.log("delete?" + isDeleted);
 
   return (
     <>
@@ -196,23 +218,23 @@ const Dashboard = () => {
         >
           Upload
         </Button>
-      
-      {/* <Box container alignItems="center" justifyContent="center"> */}
-        
-          {post ? (
-            post.map((data, i) => {
-              return (
-                <div key={i}>
-                  <FileDisplay
-                    data={data}
-                    delete={() => handleDeleteFile(data)}
-                  />
-                </div>
-              );
-            })
-          ) : (
-            <NoFileDisplay />
-          )}
+
+        {/* <Box container alignItems="center" justifyContent="center"> */}
+
+        {post ? (
+          post.map((data, i) => {
+            return (
+              <div key={i}>
+                <FileDisplay
+                  data={data}
+                  delete={() => handleDeleteFile(data)}
+                />
+              </div>
+            );
+          })
+        ) : (
+          <NoFileDisplay />
+        )}
       </Box>
     </>
   );

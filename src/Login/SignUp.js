@@ -105,6 +105,7 @@ const SignUp = () => {
             const newUserInfo = {
               firstName: firstName,
               lastName: lastName,
+              file: "",
               email: email,
               uid: user.uid,
               photoURL: "",
@@ -112,7 +113,7 @@ const SignUp = () => {
             const userListRef = refDatabase(database, `userInfo/ ${user.uid}`);
             // const newUserRef = push(userListRef);
             set(userListRef, newUserInfo);
-            setUser (newUserInfo)
+            setUser(newUserInfo);
 
             // setting the display name
             // const displayName = firstName;
