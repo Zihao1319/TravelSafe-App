@@ -20,27 +20,22 @@ const options = countryCodes;
 
 const reqToken = {
   method: "POST",
-  url: "https://test.api.amadeus.com/v1/security/oauth2/token",
+  url: process.env.REACT_APP_REQUEST_TOKEN_url,
   headers: { "content-type": "application/x-www-form-urlencoded" },
   data: new URLSearchParams({
     grant_type: "client_credentials",
-    client_id: "X79WXAh7RmvvERgqxpN4WP7lwvnytvYD",
-    client_secret: "yGNGyhQAFU2P67lc",
+    client_id: process.env.REACT_APP_client_id,
+    client_secret: process.env.REACT_APP_client_secret,
   }),
 };
 
-// const randomSelect = (arr) => {
-//   let num = Math.floor(Math.random() * arr.length);
-//   return num;
-// };
-
 const TravelForm = () => {
   const { user } = useUserContext();
-  console.log(user);
+  // console.log(user);
 
   const userName = user.firstName;
   const userID = user.uid;
-  console.log(userName, userID);
+  // console.log(userName, userID);
 
   const [destination, setDestination] = useState("");
   const [token, setToken] = useState(null);
@@ -75,7 +70,7 @@ const TravelForm = () => {
 
     const fetchToken = async () => {
       await axios.request(reqToken).then((res) => {
-        console.log(res.data.access_token);
+        // console.log(res.data.access_token);
         setToken(res.data.access_token);
         // console.log(res.data.access_token)
       });
@@ -87,13 +82,12 @@ const TravelForm = () => {
     const fetchData = async () => {
       const data = {
         method: "GET",
-        // url: `https://test.api.amadeus.com/v1/reference-data/airlines?airlineCodes=${destination}`,
         url: `https://test.api.amadeus.com/v2/duty-of-care/diseases/covid19-area-report?countryCode=${destination}`,
         headers: { Authorization: await `Bearer ${token}` },
       };
 
       axios.request(data).then((res) => {
-        console.log(token, res.data.data);
+        // console.log(token, res.data.data);
         const data = res.data.data;
         setInfo(data);
       });
@@ -107,30 +101,6 @@ const TravelForm = () => {
   // console.log(SingaporeData);
 
   const isEmpty = Object.keys(info).length === 0;
-  // console.log(info, isNotValid);
-  // console.log(info, typeof info, isEmpty);
-
-  // const saveData = () => {
-  //   const newData = {
-  //     country: info.area.name,
-  //     info: JSON.stringify(info),
-  //     timeStamp: Date.now(),
-  //   };
-
-  //   console.log(newData);
-
-  //   const database = getDatabase();
-  //   const DATA_STORAGE = `dataStorage/${user.uid}`;
-
-  //   try {
-  //     const dataStorageRef = refDatabase(database, DATA_STORAGE);
-  //     const newDataRef = push(dataStorageRef);
-  //     set(newDataRef, newData);
-  //     console.log("data saved successfully");
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
 
   return (
     <>
@@ -147,9 +117,6 @@ const TravelForm = () => {
             Hello {userName ? userName : ""}, where do you want to go next?
           </Typography>
         </Box>
-        {/* <label htmlFor="country">
-          Hello {userName ? userName : ""}, where would you love to go?
-        </label> */}
 
         <SelectCountry
           placeholder={randomCountry}

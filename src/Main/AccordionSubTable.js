@@ -1,9 +1,7 @@
 import * as React from "react";
 import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import parse from "html-react-parser";
 import Typography from "@mui/material/Typography";
@@ -37,18 +35,6 @@ const AccordionSubTable = (props) => {
                     // console.log(header, info[i], info.length);
                     return <p key={i}>{parse(info[i])}</p>;
                   }
-
-                  // return <>{parse(info[0])}</>;
-                  // info.forEach((subInfo) => {
-                  //   return (
-                  //     <div>
-                  //       <ul>
-                  //         <li>{parse(subInfo)}</li>
-                  //       </ul>
-                  //       {typeof subInfo === "string" ? parse(subInfo) : subInfo}
-                  //     </div>
-                  //   );
-                  // });
                 } else if (!isArray) {
                   return (
                     <div>
@@ -58,8 +44,6 @@ const AccordionSubTable = (props) => {
                   );
                 }
               })}
-
-              {/* {typeof content === "string" ? parse(content) : content} */}
             </Typography>
           </TableCell>
         </TableRow>

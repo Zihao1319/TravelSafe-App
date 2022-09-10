@@ -120,15 +120,6 @@ const Profile = () => {
         <Button size="small">Search history</Button>
       </CardActions> */}
     </Box>
-
-    // <Card sx={{ maxWidth: 345 }}>
-    //   {photo ? (
-    //     <Avatar alt="Remy Sharp" src={photo} sx={{ width: 56, height: 56 }} />
-    //   ) : (
-    //     <Avatar src="/broken-image.jpg" sx={{ width: 56, height: 56 }} />
-    //   )}
-
-    // </Card>
   );
 };
 

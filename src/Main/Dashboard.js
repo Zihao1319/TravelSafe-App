@@ -162,7 +162,7 @@ const Dashboard = () => {
     } else {
       return setPost(user.file);
     }
-  }, [alert, isDeleted]);
+  }, [alert, isDeleted, file]);
 
   // useEffect(() => {
   //   if (isUpdated) {

@@ -15,5 +15,3 @@ export const NoFileDisplay = () => {
     </Typography>
   );
 };
-
-// export default {ErrorDisplay, NoFileDisplay};

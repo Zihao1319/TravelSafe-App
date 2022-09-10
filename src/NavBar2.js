@@ -51,7 +51,7 @@ const NavBar = () => {
   };
 
   const pages = ["Home", "Dashboard", "Logout"];
-  const settings = ["Profile", "Account"];
+  const settings = ["Profile"];
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);

@@ -14,9 +14,6 @@ const DisplayInfo = (data) => {
 
   const vaccineInfo = info.travelVaccination;
   const vaccineObj = vaccineInfo["qualifiedVaccines"] || null;
-  // console.log(vaccineObj);
-  // console.log(vaccineObj);
-  // console.log(extractVaccineInfo(vaccineObj, "supportedVaccineProducts"));
   const vaccineList = extractVaccineInfo(
     vaccineObj,
     "supportedVaccineProducts"
@@ -33,22 +30,6 @@ const DisplayInfo = (data) => {
     "#FBC02D",
     "#F9A825",
   ];
-  // console.log(vaccineList);
-
-  // const vaccineList2 = extractVaccineInfo2(
-  //   vaccineObj,
-  //   "supportedVaccineProducts"
-  // );
-
-  // console.log(vaccineList2);
-
-  // // const url = convertToUrl ("https://safetravel.ica.gov.sg/arriving/general-travel/fully-vaccinated")
-  // console.log(url)
-  // const test =  "https://safetravel.ica.gov.sg/arriving/general-travel/fully-vaccinated, https://safetravel.ica.gov.sg/arriving/general-travel/non-fully-vaccinated"
-  // console.log(convertToUrl (test))
-  // console.log(extractObj(vaccineInfo, ["supportedVaccineProducts"]));
-
-  // console.log(findNestedObj(info.entry, ["lastUpdate", "ban", "text"]));
 
   const entryData = extractObj(info.entry, [
     "lastUpdate",

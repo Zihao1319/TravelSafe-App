@@ -36,12 +36,6 @@ const FileDisplay = (props) => {
   return (
     <Card sx={{ minWidth: 345, bgcolor: "#F5FCFF", display: "flex", m: 1 }}>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
-        {/* <CardMedia
-        component="img"
-        height="140"
-        image={url}
-        alt="green iguana"
-      /> */}
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
             {description}

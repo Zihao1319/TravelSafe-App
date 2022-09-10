@@ -28,9 +28,10 @@ import {
 import * as yup from "yup";
 
 const Login = () => {
-  const { user, setUser } = useUserContext();
-  const navigate = useNavigate();
+  const { setUser } = useUserContext();
   const [err, setErr] = useState(false);
+  const theme = createTheme();
+  const navigate = useNavigate();
 
   const validationSchema = yup.object({
     email: yup
@@ -102,35 +103,9 @@ const Login = () => {
         setErr({
           firebaseErrorMessage: err.message,
         });
-        // setStatus({ firebaseErrorMessage: error.message });
       }
     },
   });
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   // const auth = getAuth();
-  //   try {
-  //     const user = await signInWithEmailAndPassword(
-  //       auth,
-  //       form.email,
-  //       form.password
-
-  //     ).then((response) => {
-  //       console.log("Login successful");
-  //     });
-
-  //     if (user) {
-  //       setUser(user);
-  //       localStorage.setItems("user", user.user.email);
-  //       navigate("/");
-  //     }
-  //   } catch (err) {
-  //     console.log(err.message);
-  //   }
-  // };
-
-  const theme = createTheme();
 
   return (
     <>
@@ -213,12 +188,7 @@ const Login = () => {
                   onChange={formik.handleChange}
                   helperText={formik.touched.password && formik.errors.password}
                 />
-                {/* <ErrorMessage /> */}
 
-                {/* <FormControlLabel
-                  control={<Checkbox value="remember" color="primary" />}
-                  label="Remember me"
-                /> */}
                 {err.firebaseErrorMessage && <p>{err.firebaseErrorMessage}</p>}
                 <Button
                   type="submit"
@@ -229,18 +199,13 @@ const Login = () => {
                   Sign In
                 </Button>
                 <Grid container>
-                  <Grid item xs>
-                    {/* <Link href="#" variant="body2">
-                      Forgot password?
-                    </Link> */}
-                  </Grid>
+                  <Grid item xs></Grid>
                   <Grid item>
                     <Link href="./SignUp" variant="body2">
                       {"Don't have an account? Sign Up"}
                     </Link>
                   </Grid>
                 </Grid>
-                {/* <Copyright sx={{ mt: 5 }} /> */}
               </Box>
             </Box>
           </Grid>

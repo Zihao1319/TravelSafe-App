@@ -28,7 +28,7 @@ const AccordionDisplay = (props) => {
   const data = renameKey(props.data, newKeys);
   const title = props.title;
   const backgrdColor = props.color;
-  console.log(backgrdColor);
+  // console.log(backgrdColor);
 
   const [expanded, setExpanded] = React.useState(false);
 
